@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Dashboard</h1>
+<div class="dashboard-grid">
+    <div class="card">
+        <h3>Current Balance</h3>
+        <p>₹{{ "{:,.2f}".format(balance) }}</p>
+    </div>
+    <div class="card">
+        <h3>Monthly Budget</h3>
+        <p>Spent: ₹{{ "{:,.2f}".format(budget.spent) }} of ₹{{ "{:,.2f}".format(budget.total) }}</p>
+        <div class="progress-bar-container">
+            <div class="progress-bar" style="width: {{ progress }}%;"></div>
+        </div>
+    </div>
+    <div class="card">
+        <h3>Savings Suggestions</h3>
+        <p>Consider reducing your dining out expenses by ₹100 this month.</p>
+    </div>
+</div>
+{% endblock %}

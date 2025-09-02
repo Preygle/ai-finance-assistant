@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Financial Goals</h1>
+<div class="form-container">
+    <form method="POST">
+        <input type="text" name="goal_name" placeholder="Goal Name" required>
+        <input type="number" name="target_amount" placeholder="Target Amount" required>
+        <input type="date" name="deadline" required>
+        <button type="submit">Add Goal</button>
+    </form>
+</div>
+<div class="goals-list">
+    <h2>Your Goals</h2>
+    <ul>
+        {% for goal in goals %}
+        <li>{{ goal.name }} - ₹{{ goal.amount }} by {{ goal.deadline }}</li>
+        {% else %}
+        <li>No goals set yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,21 +1,129 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1>Dashboard</h1>
-<div class="dashboard-grid">
-    <div class="card">
-        <h3>Current Balance</h3>
-        <p>₹{{ "{:,.2f}".format(balance) }}</p>
-    </div>
-    <div class="card">
-        <h3>Monthly Budget</h3>
-        <p>Spent: ₹{{ "{:,.2f}".format(budget.spent) }} of ₹{{ "{:,.2f}".format(budget.total) }}</p>
-        <div class="progress-bar-container">
-            <div class="progress-bar" style="width: {{ progress }}%;"></div>
+{% if user and user.is_authenticated %}
+    <!-- Authenticated User Homepage -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>Welcome back, {{ user.username }}!</h1>
+            <p>Your AI-powered financial assistant is ready to help you manage your finances with advanced analytics and blockchain security.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-large">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Go to Dashboard
+                </a>
+                <a href="{{ url_for('upload') }}" class="btn btn-secondary btn-large">
+                    <i class="fas fa-upload"></i>
+                    Upload Transactions
+                </a>
+            </div>
         </div>
     </div>
-    <div class="card">
-        <h3>Savings Suggestions</h3>
-        <p>Consider reducing your dining out expenses by ₹100 this month.</p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>AI-Powered Analysis</h3>
+            <p>Advanced machine learning algorithms categorize your transactions and detect patterns automatically.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Fraud Detection</h3>
+            <p>Real-time fraud detection using isolation forests and anomaly detection to protect your finances.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-link"></i>
+            </div>
+            <h3>Blockchain Security</h3>
+            <p>Tamper-proof transaction verification using Ethereum blockchain for complete data integrity.</p>
+        </div>
     </div>
-</div>
+{% else %}
+    <!-- Non-Authenticated User Homepage -->
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1>AI-Powered Finance Assistant</h1>
+            <p>Transform your financial data into actionable insights with advanced AI, fraud detection, and blockchain security. Upload your transactions and let our intelligent system do the rest.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-large">
+                    <i class="fas fa-user-plus"></i>
+                    Get Started
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-secondary btn-large">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="features-section">
+        <h2>Why Choose Our Finance Assistant?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>AI-Powered Categorization</h3>
+                <p>Automatically categorize your transactions using machine learning algorithms. No more manual data entry.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Advanced Fraud Detection</h3>
+                <p>Real-time monitoring detects suspicious transactions using isolation forests and anomaly detection.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Smart Budgeting</h3>
+                <p>Get personalized budget recommendations and spending forecasts based on your financial patterns.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-link"></i>
+                </div>
+                <h3>Blockchain Integrity</h3>
+                <p>Every transaction is verified and logged on the blockchain for complete tamper-proof security.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Privacy First</h3>
+                <p>Your raw transaction data is never stored. Only AI models and blockchain proofs are persisted.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Easy Integration</h3>
+                <p>Upload CSV files or connect via bank APIs. Simple, secure, and user-friendly interface.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <h2>Ready to Transform Your Financial Management?</h2>
+        <p>Join thousands of users who trust our AI-powered platform for secure, intelligent financial analysis.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-large">
+            <i class="fas fa-rocket"></i>
+            Start Your Free Account
+        </a>
+    </div>
+{% endif %}
 {% endblock %}

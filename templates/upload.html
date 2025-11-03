@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Data - AI-Powered Finance Assistant{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <div class="upload-header">
+        <h1><i class="fas fa-cloud-upload-alt"></i> Upload Financial Data</h1>
+        <p>Upload your transaction data to get AI-powered insights and analysis.</p>
+    </div>
+
+    <div class="upload-options">
+        <div class="upload-card">
+            <div class="upload-card-header">
+                <i class="fas fa-file-csv"></i>
+                <h3>CSV File Upload</h3>
+            </div>
+            <div class="upload-card-content">
+                <p>Upload your transaction data in CSV format. Supported columns: Date, Merchant, Amount, Category.</p>
+                <form action="{{ url_for('upload_csv') }}" method="POST" enctype="multipart/form-data" class="upload-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
+                    <div class="file-input-group">
+                        <input type="file" name="csv_file" id="csv_file" accept=".csv" required class="file-input">
+                        <label for="csv_file" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="file-text">Choose CSV File</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-upload"></i>
+                        Upload & Preview
+                    </button>
+                </form>
+                <div class="upload-help">
+                    <h4>CSV Format Requirements:</h4>
+                    <ul>
+                        <li>Date column (YYYY-MM-DD format)</li>
+                        <li>Merchant/Description column</li>
+                        <li>Amount column (positive for income, negative for expenses)</li>
+                        <li>Category column (optional)</li>
+                    </ul>
+                    <p><a href="{{ url_for('static', filename='sample_transactions.csv') }}" download>Download sample CSV</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="upload-card">
+            <div class="upload-card-header">
+                <i class="fas fa-university"></i>
+                <h3>Bank Account Connection</h3>
+            </div>
+            <div class="upload-card-content">
+                <p>Securely connect your bank account using Plaid to automatically import transactions.</p>
+                <a href="{{ url_for('plaid_connect') }}" class="btn btn-secondary">
+                    <i class="fas fa-link"></i>
+                    Connect Bank Account
+                </a>
+                <div class="bank-features">
+                    <h4>Bank Connection Features:</h4>
+                    <ul>
+                        <li>Automatic transaction import</li>
+                        <li>Real-time balance updates</li>
+                        <li>Secure OAuth authentication</li>
+                        <li>Multiple account support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="upload-status">
+        <div class="status-card">
+            <div class="status-header">
+                <i class="fas fa-info-circle"></i>
+                <h3>Upload Status</h3>
+            </div>
+            <div class="status-content">
+                <div class="status-item">
+                    <span class="status-label">Privacy Mode:</span>
+                    <span class="status-value">
+                        {% if config.PRIVACY_MODE %}
+                            <span class="status-enabled">Enabled</span>
+                            <small>Raw data will not be stored, only blockchain proofs</small>
+                        {% else %}
+                            <span class="status-disabled">Disabled</span>
+                            <small>Transaction data will be stored locally</small>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">AI Analysis:</span>
+                    <span class="status-value">
+                        <span class="status-enabled">Enabled</span>
+                        <small>Categorization and fraud detection active</small>
+                    </span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Blockchain Logging:</span>
+                    <span class="status-value">
+                        <span class="status-enabled">Enabled</span>
+                        <small>Transaction integrity proofs will be logged</small>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.upload-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.upload-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.upload-header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.upload-header p {
+    color: #7f8c8d;
+    font-size: 1.1em;
+}
+
+.upload-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.upload-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.upload-card:hover {
+    transform: translateY(-5px);
+}
+
+.upload-card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.upload-card-header i {
+    font-size: 2em;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.upload-card-content {
+    padding: 30px;
+}
+
+.file-input-group {
+    margin-bottom: 20px;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-input-label {
+    display: block;
+    padding: 15px;
+    border: 2px dashed #3498db;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.file-input-label:hover {
+    border-color: #2980b9;
+    background: #e3f2fd;
+}
+
+.file-input-label i {
+    font-size: 1.5em;
+    color: #3498db;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2980b9;
+}
+
+.btn-secondary {
+    background: #95a5a6;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #7f8c8d;
+}
+
+.upload-help, .bank-features {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.upload-help h4, .bank-features h4 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.upload-help ul, .bank-features ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.upload-help li, .bank-features li {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.upload-status {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.status-header {
+    background: #34495e;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.status-content {
+    padding: 30px;
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-label {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.status-value {
+    text-align: right;
+}
+
+.status-enabled {
+    color: #27ae60;
+    font-weight: 500;
+}
+
+.status-disabled {
+    color: #e74c3c;
+    font-weight: 500;
+}
+
+.status-value small {
+    display: block;
+    color: #7f8c8d;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .upload-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .status-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .status-value {
+        text-align: left;
+    }
+}
+</style>
+{% endblock %}

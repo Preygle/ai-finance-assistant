@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Preview CSV - AI-Powered Finance Assistant{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <div class="container">
+        <div class="preview-container">
+            <div class="preview-header">
+                <h1><i class="fas fa-file-import"></i> Preview & Map CSV Data</h1>
+                <p>Review your data and map the columns to ensure accurate processing.</p>
+            </div>
+
+            <div class="preview-content">
+                <div class="column-mapping">
+                    <h3><i class="fas fa-map-signs"></i> Column Mapping</h3>
+                    <p>Match your CSV columns to the required transaction fields. Our smart-detection has pre-selected some columns for you.</p>
+                    
+                    <form method="POST" action="{{ url_for('process_csv') }}" class="mapping-form">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mapping-grid">
+                            <div class="mapping-field">
+                                <label for="date_column"><i class="fas fa-calendar-alt"></i> Date Column *</label>
+                                <select name="date_column" id="date_column" class="form-input" required>
+                                    <option value="">Select date column</option>
+                                    {% for header in headers %}
+                                    <option value="{{ loop.index0 }}">{{ header }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="mapping-field">
+                                <label for="merchant_column"><i class="fas fa-store"></i> Merchant Column *</label>
+                                <select name="merchant_column" id="merchant_column" class="form-input" required>
+                                    <option value="">Select merchant column</option>
+                                    {% for header in headers %}
+                                    <option value="{{ loop.index0 }}">{{ header }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="mapping-field">
+                                <label for="amount_column"><i class="fas fa-money-bill-wave"></i> Amount Column *</label>
+                                <select name="amount_column" id="amount_column" class="form-input" required>
+                                    <option value="">Select amount column</option>
+                                    {% for header in headers %}
+                                    <option value="{{ loop.index0 }}">{{ header }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="mapping-field">
+                                <label for="category_column"><i class="fas fa-tags"></i> Category Column</label>
+                                <select name="category_column" id="category_column" class="form-input">
+                                    <option value="">Select category column (optional)</option>
+                                    {% for header in headers %}
+                                    <option value="{{ loop.index0 }}">{{ header }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="currency-settings">
+                            <h4><i class="fas fa-coins"></i> Currency Settings</h4>
+                            <div class="currency-group">
+                                <label for="currency">Original Currency in CSV</label>
+                                <select name="currency" id="currency" class="form-input">
+                                    <option value="INR">Indian Rupee (INR)</option>
+                                    <option value="USD">US Dollar (USD)</option>
+                                    <option value="EUR">Euro (EUR)</option>
+                                    <option value="GBP">British Pound (GBP)</option>
+                                </select>
+                                <p class="form-help">All amounts will be converted to INR for consistent analysis.</p>
+                            </div>
+                        </div>
+
+                        <div class="preview-actions">
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url_for('transactions') }}'">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-check-circle"></i>
+                                Confirm & Process
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="preview-table-container">
+                    <h3><i class="fas fa-table"></i> Data Preview</h3>
+                    <div class="table-wrapper">
+                        <table class="transactions-table preview-table">
+                            <thead>
+                                <tr>
+                                    {% for header in headers %}
+                                    <th>{{ header }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in preview_data %}
+                                <tr>
+                                    {% for value in row.values() %}
+                                    <td>{{ value }}</td>
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const headers = {{ headers|tojson }};
+    const dateColumn = document.getElementById('date_column');
+    const merchantColumn = document.getElementById('merchant_column');
+    const amountColumn = document.getElementById('amount_column');
+    const categoryColumn = document.getElementById('category_column');
+
+    function findAndSelect(selectElement, keywords) {
+        for (let i = 0; i < headers.length; i++) {
+            const header = headers[i].toLowerCase();
+            if (keywords.some(kw => header.includes(kw))) {
+                selectElement.value = i;
+                return;
+            }
+        }
+    }
+
+    findAndSelect(dateColumn, ['date', 'time', 'created']);
+    findAndSelect(merchantColumn, ['merchant', 'description', 'payee', 'vendor']);
+    findAndSelect(amountColumn, ['amount', 'value', 'total', 'price']);
+    findAndSelect(categoryColumn, ['category', 'type', 'class']);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,394 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - AI-Powered Finance Assistant{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Welcome back, {{ user.username }}!</h1>
+        <p>Here's your financial overview and AI-powered insights.</p>
+    </div>
+
+    <!-- Financial Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card income">
+            <div class="card-icon">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+            <div class="card-content">
+                <h3>Total Income</h3>
+                <p class="amount">₹{{ "{:,.2f}".format(total_income) }}</p>
+            </div>
+        </div>
+        
+        <div class="summary-card expenses">
+            <div class="card-icon">
+                <i class="fas fa-arrow-down"></i>
+            </div>
+            <div class="card-content">
+                <h3>Total Expenses</h3>
+                <p class="amount">₹{{ "{:,.2f}".format(total_expenses) }}</p>
+            </div>
+        </div>
+        
+        <div class="summary-card balance">
+            <div class="card-icon">
+                <i class="fas fa-balance-scale"></i>
+            </div>
+            <div class="card-content">
+                <h3>Net Balance</h3>
+                <p class="amount {% if net_balance >= 0 %}positive{% else %}negative{% endif %}">
+                    ₹{{ "{:,.2f}".format(net_balance) }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Insights Section -->
+    <div class="insights-section">
+        <h2><i class="fas fa-brain"></i> AI-Powered Insights</h2>
+        
+        <div class="insights-grid">
+            <div class="insight-card">
+                <h3><i class="fas fa-chart-line"></i> Spending Analysis</h3>
+                <div class="insight-content">
+                    {% if spending_analysis.insights %}
+                        {% for insight in spending_analysis.insights %}
+                            <p class="insight-item">{{ insight }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>Upload transactions to get AI insights!</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="insight-card">
+                <h3><i class="fas fa-lightbulb"></i> Recommendations</h3>
+                <div class="insight-content">
+                    {% if spending_analysis.recommendations %}
+                        {% for recommendation in spending_analysis.recommendations %}
+                            <p class="recommendation-item">{{ recommendation }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>No recommendations available yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="insight-card">
+                <h3><i class="fas fa-bullseye"></i> Budget Goals</h3>
+                <div class="insight-content">
+                    {% if budget_recommendations.recommendations %}
+                        {% for recommendation in budget_recommendations.recommendations %}
+                            <p class="budget-item">{{ recommendation }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>Set up transactions to get budget recommendations!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+        <div class="actions-grid">
+            <a href="{{ url_for('upload') }}" class="action-card">
+                <i class="fas fa-upload"></i>
+                <h3>Upload Data</h3>
+                <p>Upload CSV or connect bank account</p>
+            </a>
+            
+            <a href="{{ url_for('transactions') }}" class="action-card">
+                <i class="fas fa-list"></i>
+                <h3>View Transactions</h3>
+                <p>See all your financial transactions</p>
+            </a>
+            
+            <a href="{{ url_for('fraud_report') }}" class="action-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Fraud Detection</h3>
+                <p>Check for suspicious transactions</p>
+            </a>
+            
+            <a href="#" class="action-card" onclick="loadAnalytics()">
+                <i class="fas fa-chart-pie"></i>
+                <h3>Analytics</h3>
+                <p>Detailed spending analysis</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    {% if recent_transactions %}
+    <div class="recent-transactions">
+        <h2><i class="fas fa-history"></i> Recent Transactions</h2>
+        <div class="transactions-list">
+            {% for transaction in recent_transactions %}
+            <div class="transaction-item">
+                <div class="transaction-info">
+                    <h4>{{ transaction.merchant }}</h4>
+                    <p>{{ transaction.date.strftime('%B %d, %Y') }}</p>
+                </div>
+                <div class="transaction-amount {% if transaction.amount >= 0 %}positive{% else %}negative{% endif %}">
+                    ₹{{ "{:,.2f}".format(transaction.amount) }}
+                </div>
+                <div class="transaction-category">
+                    {{ transaction.category or 'Uncategorized' }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.dashboard-header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.summary-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.summary-card.income {
+    border-left: 4px solid #27ae60;
+}
+
+.summary-card.expenses {
+    border-left: 4px solid #e74c3c;
+}
+
+.summary-card.balance {
+    border-left: 4px solid #3498db;
+}
+
+.card-icon {
+    font-size: 2em;
+    color: #7f8c8d;
+}
+
+.card-content h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.card-content .amount {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.amount.positive {
+    color: #27ae60;
+}
+
+.amount.negative {
+    color: #e74c3c;
+}
+
+.insights-section {
+    margin-bottom: 40px;
+}
+
+.insights-section h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.insight-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.insight-card h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.insight-item, .recommendation-item, .budget-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #ecf0f1;
+    margin: 0;
+}
+
+.insight-item:last-child, .recommendation-item:last-child, .budget-item:last-child {
+    border-bottom: none;
+}
+
+.quick-actions h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.action-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+}
+
+.action-card i {
+    font-size: 2em;
+    color: #3498db;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.action-card h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.action-card p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 0.9em;
+}
+
+.recent-transactions h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.transactions-list {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-info h4 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+}
+
+.transaction-info p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 0.9em;
+}
+
+.transaction-amount {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.transaction-category {
+    background: #ecf0f1;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    color: #7f8c8d;
+}
+
+@media (max-width: 768px) {
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .insights-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .transaction-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
+</style>
+
+<script>
+function loadAnalytics() {
+    fetch('/api/analytics/spending-patterns')
+        .then(response => response.json())
+        .then(data => {
+            alert('Spending Analysis:\n' + data.insights.join('\n'));
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error loading analytics');
+        });
+}
+</script>
+{% endblock %}
+

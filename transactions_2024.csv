@@ -1,0 +1,702 @@
+Date,Merchant,Amount,Category,Description
+2024-01-04,Stationary Shop,-13090.71,Education,Purchase at Stationary Shop
+2024-01-04,Petrol Pump,-2640.98,Transportation,Purchase at Petrol Pump
+2024-01-04,Petrol Pump,-1697.9,Transportation,Purchase at Petrol Pump
+2024-01-04,Jio,-1660.61,Bills and Utilities,Purchase at Jio
+2024-01-06,Amazon Prime,-228.75,Entertainment,Purchase at Amazon Prime
+2024-01-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-01-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-01-08,Metro Card Recharge,-2705.1,Transportation,Purchase at Metro Card Recharge
+2024-01-08,D-Mart,-1815.26,Shopping,Purchase at D-Mart
+2024-01-08,Tata Power,-1570.49,Bills and Utilities,Purchase at Tata Power
+2024-01-08,Book Store,-6150.39,Education,Purchase at Book Store
+2024-01-09,Uber,-1266.36,Transportation,Purchase at Uber
+2024-01-10,PVR Cinemas,-211.39,Entertainment,Purchase at PVR Cinemas
+2024-01-10,Stationary Shop,-6694.77,Education,Purchase at Stationary Shop
+2024-01-11,BookMyShow,-1306.74,Entertainment,Purchase at BookMyShow
+2024-01-12,Stationary Shop,-10025.08,Education,Purchase at Stationary Shop
+2024-01-13,Food Panda,-661.93,Food and Dining,Purchase at Food Panda
+2024-01-15,Indian Railways,-1883.64,Transportation,Purchase at Indian Railways
+2024-01-17,Gym Membership,-2760.36,Health and Fitness,Purchase at Gym Membership
+2024-01-17,Dominos,-1428.51,Food and Dining,Purchase at Dominos
+2024-01-18,Netflix,-1497.43,Entertainment,Purchase at Netflix
+2024-01-19,Indian Railways,-2194.68,Transportation,Purchase at Indian Railways
+2024-01-20,Ola,-2111.24,Transportation,Purchase at Ola
+2024-01-20,Book Store,-6245.03,Education,Purchase at Book Store
+2024-01-21,Jio,-1875.37,Bills and Utilities,Purchase at Jio
+2024-01-22,Diagnostic Center,-1601.12,Health and Fitness,Purchase at Diagnostic Center
+2024-01-22,Ola,-1665.33,Transportation,Purchase at Ola
+2024-01-22,Uber,-1768.0,Transportation,Purchase at Uber
+2024-01-24,PVR Cinemas,-1426.5,Entertainment,Purchase at PVR Cinemas
+2024-01-24,Spotify,-1442.47,Entertainment,Purchase at Spotify
+2024-01-25,BSNL,-4857.56,Bills and Utilities,Purchase at BSNL
+2024-01-26,Metro Card Recharge,-2703.51,Transportation,Purchase at Metro Card Recharge
+2024-01-28,Stationary Shop,-12111.31,Education,Purchase at Stationary Shop
+2024-01-30,Stationary Shop,-1727.13,Education,Purchase at Stationary Shop
+2024-01-30,BSNL,-1313.5,Bills and Utilities,Purchase at BSNL
+2024-01-31,Diagnostic Center,-2861.71,Health and Fitness,Purchase at Diagnostic Center
+2024-02-01,Dominos,-256.25,Food and Dining,Purchase at Dominos
+2024-02-05,McDonald's,-1749.06,Food and Dining,Purchase at McDonald's
+2024-02-05,Zomato,-1303.94,Food and Dining,Purchase at Zomato
+2024-02-06,Swiggy,-527.77,Food and Dining,Purchase at Swiggy
+2024-02-07,Swiggy,-859.91,Food and Dining,Purchase at Swiggy
+2024-02-08,Myntra,-875.08,Shopping,Purchase at Myntra
+2024-02-11,Petrol Pump,-2699.03,Transportation,Purchase at Petrol Pump
+2024-02-11,Udemy,-13157.45,Education,Purchase at Udemy
+2024-02-14,School Fees,-547.58,Education,Purchase at School Fees
+2024-02-16,Dominos,-1523.07,Food and Dining,Purchase at Dominos
+2024-02-16,D-Mart,-3129.63,Shopping,Purchase at D-Mart
+2024-02-17,Gym Membership,-4608.78,Health and Fitness,Purchase at Gym Membership
+2024-02-19,Apollo Pharmacy,-4481.36,Health and Fitness,Purchase at Apollo Pharmacy
+2024-02-21,Zomato,-870.27,Food and Dining,Purchase at Zomato
+2024-02-25,Reliance Retail,-4515.18,Shopping,Purchase at Reliance Retail
+2024-02-26,Jio,-4230.15,Bills and Utilities,Purchase at Jio
+2024-02-26,Myntra,-2014.64,Shopping,Purchase at Myntra
+2024-02-26,Stationary Shop,-12965.18,Education,Purchase at Stationary Shop
+2024-02-27,Udemy,-5142.71,Education,Purchase at Udemy
+2024-02-28,Dominos,-1701.64,Food and Dining,Purchase at Dominos
+2024-02-29,Gym Membership,-1436.66,Health and Fitness,Purchase at Gym Membership
+2024-02-29,Gym Membership,-3945.01,Health and Fitness,Purchase at Gym Membership
+2024-02-29,Myntra,-3645.3,Shopping,Purchase at Myntra
+2024-03-01,Food Panda,-1806.78,Food and Dining,Purchase at Food Panda
+2024-03-02,Indian Railways,-1952.2,Transportation,Purchase at Indian Railways
+2024-03-03,Amazon,-1308.31,Shopping,Purchase at Amazon
+2024-03-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-03-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-03-07,Zomato,-1405.74,Food and Dining,Purchase at Zomato
+2024-03-09,Indian Railways,-910.31,Transportation,Purchase at Indian Railways
+2024-03-10,Medical Store,-2029.77,Health and Fitness,Purchase at Medical Store
+2024-03-11,Medical Store,-2578.36,Health and Fitness,Purchase at Medical Store
+2024-03-11,Ola,-1202.38,Transportation,Purchase at Ola
+2024-03-11,Amazon Prime,-1636.01,Entertainment,Purchase at Amazon Prime
+2024-03-12,Medical Store,-2617.27,Health and Fitness,Purchase at Medical Store
+2024-03-12,Myntra,-4550.27,Shopping,Purchase at Myntra
+2024-03-14,BookMyShow,-1787.43,Entertainment,Purchase at BookMyShow
+2024-03-15,Water Supply,-4044.03,Bills and Utilities,Purchase at Water Supply
+2024-03-19,Netflix,-776.97,Entertainment,Purchase at Netflix
+2024-03-19,Udemy,-4075.6,Education,Purchase at Udemy
+2024-03-19,Swiggy,-968.19,Food and Dining,Purchase at Swiggy
+2024-03-20,Reliance Retail,-3310.16,Shopping,Purchase at Reliance Retail
+2024-03-21,Book Store,-4343.79,Education,Purchase at Book Store
+2024-03-23,Diagnostic Center,-4603.18,Health and Fitness,Purchase at Diagnostic Center
+2024-03-23,Tata Power,-2067.39,Bills and Utilities,Purchase at Tata Power
+2024-03-23,McDonald's,-921.97,Food and Dining,Purchase at McDonald's
+2024-03-25,Apollo Pharmacy,-3603.25,Health and Fitness,Purchase at Apollo Pharmacy
+2024-03-27,Indian Railways,-1389.03,Transportation,Purchase at Indian Railways
+2024-03-27,Big Bazaar,-3106.93,Shopping,Purchase at Big Bazaar
+2024-03-27,Amazon Prime,-1669.17,Entertainment,Purchase at Amazon Prime
+2024-03-28,Indian Railways,-1935.9,Transportation,Purchase at Indian Railways
+2024-03-30,Netflix,-810.73,Entertainment,Purchase at Netflix
+2024-03-30,Myntra,-3614.12,Shopping,Purchase at Myntra
+2024-04-01,BSNL,-4917.54,Bills and Utilities,Purchase at BSNL
+2024-04-01,Dominos,-1478.8,Food and Dining,Purchase at Dominos
+2024-04-04,Food Panda,-1857.75,Food and Dining,Purchase at Food Panda
+2024-04-05,Amazon,-3778.84,Shopping,Purchase at Amazon
+2024-04-05,BookMyShow,-895.56,Entertainment,Purchase at BookMyShow
+2024-04-06,Coursera,-3512.13,Education,Purchase at Coursera
+2024-04-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-04-07,Water Supply,-1086.74,Bills and Utilities,Purchase at Water Supply
+2024-04-08,Metro Card Recharge,-2833.7,Transportation,Purchase at Metro Card Recharge
+2024-04-11,Gym Membership,-516.2,Health and Fitness,Purchase at Gym Membership
+2024-04-12,Udemy,-7572.7,Education,Purchase at Udemy
+2024-04-13,Flipkart,-1948.86,Shopping,Purchase at Flipkart
+2024-04-13,BSNL,-3775.08,Bills and Utilities,Purchase at BSNL
+2024-04-14,Apollo Pharmacy,-2531.74,Health and Fitness,Purchase at Apollo Pharmacy
+2024-04-15,D-Mart,-769.73,Shopping,Purchase at D-Mart
+2024-04-16,Spotify,-317.7,Entertainment,Purchase at Spotify
+2024-04-16,Ola,-1479.2,Transportation,Purchase at Ola
+2024-04-16,Amazon,-4915.22,Shopping,Purchase at Amazon
+2024-04-16,Apollo Pharmacy,-1492.2,Health and Fitness,Purchase at Apollo Pharmacy
+2024-04-17,Myntra,-4507.54,Shopping,Purchase at Myntra
+2024-04-18,Metro Card Recharge,-499.72,Transportation,Purchase at Metro Card Recharge
+2024-04-19,Diagnostic Center,-2870.07,Health and Fitness,Purchase at Diagnostic Center
+2024-04-20,Indian Railways,-2101.07,Transportation,Purchase at Indian Railways
+2024-04-22,Medical Store,-2001.54,Health and Fitness,Purchase at Medical Store
+2024-04-23,Coursera,-11862.11,Education,Purchase at Coursera
+2024-04-26,Amazon Prime,-1588.5,Entertainment,Purchase at Amazon Prime
+2024-04-28,Tata Power,-4099.67,Bills and Utilities,Purchase at Tata Power
+2024-04-28,Medical Store,-4546.42,Health and Fitness,Purchase at Medical Store
+2024-04-29,Amazon,-972.81,Shopping,Purchase at Amazon
+2024-04-30,Stationary Shop,-14791.78,Education,Purchase at Stationary Shop
+2024-05-03,Diagnostic Center,-2256.06,Health and Fitness,Purchase at Diagnostic Center
+2024-05-03,PVR Cinemas,-1378.19,Entertainment,Purchase at PVR Cinemas
+2024-05-04,Starbucks,-1934.46,Food and Dining,Purchase at Starbucks
+2024-05-04,Dominos,-1295.76,Food and Dining,Purchase at Dominos
+2024-05-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-05-09,Reliance Retail,-4386.9,Shopping,Purchase at Reliance Retail
+2024-05-09,Gym Membership,-2633.9,Health and Fitness,Purchase at Gym Membership
+2024-05-10,School Fees,-11363.73,Education,Purchase at School Fees
+2024-05-10,Indian Railways,-2315.8,Transportation,Purchase at Indian Railways
+2024-05-10,Swiggy,-359.03,Food and Dining,Purchase at Swiggy
+2024-05-11,PVR Cinemas,-1758.33,Entertainment,Purchase at PVR Cinemas
+2024-05-12,BookMyShow,-718.99,Entertainment,Purchase at BookMyShow
+2024-05-12,Spotify,-985.6,Entertainment,Purchase at Spotify
+2024-05-13,McDonald's,-212.54,Food and Dining,Purchase at McDonald's
+2024-05-13,Myntra,-1956.29,Shopping,Purchase at Myntra
+2024-05-14,Stationary Shop,-2312.99,Education,Purchase at Stationary Shop
+2024-05-16,Jio,-1105.37,Bills and Utilities,Purchase at Jio
+2024-05-17,BSNL,-1697.81,Bills and Utilities,Purchase at BSNL
+2024-05-18,Dominos,-1074.06,Food and Dining,Purchase at Dominos
+2024-05-18,D-Mart,-3799.99,Shopping,Purchase at D-Mart
+2024-05-18,Petrol Pump,-271.51,Transportation,Purchase at Petrol Pump
+2024-05-19,Netflix,-1638.56,Entertainment,Purchase at Netflix
+2024-05-19,BSNL,-968.66,Bills and Utilities,Purchase at BSNL
+2024-05-19,Flipkart,-3405.48,Shopping,Purchase at Flipkart
+2024-05-19,Coursera,-7151.94,Education,Purchase at Coursera
+2024-05-19,PVR Cinemas,-1822.49,Entertainment,Purchase at PVR Cinemas
+2024-05-22,Big Bazaar,-1998.78,Shopping,Purchase at Big Bazaar
+2024-05-23,Swiggy,-428.23,Food and Dining,Purchase at Swiggy
+2024-05-23,Diagnostic Center,-1079.51,Health and Fitness,Purchase at Diagnostic Center
+2024-05-23,Starbucks,-1571.79,Food and Dining,Purchase at Starbucks
+2024-05-24,Apollo Pharmacy,-3349.94,Health and Fitness,Purchase at Apollo Pharmacy
+2024-05-25,Metro Card Recharge,-947.65,Transportation,Purchase at Metro Card Recharge
+2024-05-27,Book Store,-1281.77,Education,Purchase at Book Store
+2024-05-28,D-Mart,-4525.08,Shopping,Purchase at D-Mart
+2024-05-30,PVR Cinemas,-797.93,Entertainment,Purchase at PVR Cinemas
+2024-05-30,Tata Power,-1072.78,Bills and Utilities,Purchase at Tata Power
+2024-06-02,Water Supply,-3692.34,Bills and Utilities,Purchase at Water Supply
+2024-06-02,Zomato,-1545.7,Food and Dining,Purchase at Zomato
+2024-06-03,Indian Railways,-322.61,Transportation,Purchase at Indian Railways
+2024-06-03,BSNL,-3642.4,Bills and Utilities,Purchase at BSNL
+2024-06-03,Food Panda,-969.19,Food and Dining,Purchase at Food Panda
+2024-06-03,Airtel,-2313.18,Bills and Utilities,Purchase at Airtel
+2024-06-04,School Fees,-13960.96,Education,Purchase at School Fees
+2024-06-05,Petrol Pump,-387.58,Transportation,Purchase at Petrol Pump
+2024-06-05,Zomato,-1281.14,Food and Dining,Purchase at Zomato
+2024-06-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-06-09,Gym Membership,-2788.96,Health and Fitness,Purchase at Gym Membership
+2024-06-10,Udemy,-10364.01,Education,Purchase at Udemy
+2024-06-10,BSNL,-1815.85,Bills and Utilities,Purchase at BSNL
+2024-06-10,Jio,-3954.91,Bills and Utilities,Purchase at Jio
+2024-06-13,Airtel,-755.21,Bills and Utilities,Purchase at Airtel
+2024-06-13,School Fees,-8149.41,Education,Purchase at School Fees
+2024-06-14,Uber,-2750.31,Transportation,Purchase at Uber
+2024-06-14,Reliance Retail,-3051.34,Shopping,Purchase at Reliance Retail
+2024-06-14,Swiggy,-221.9,Food and Dining,Purchase at Swiggy
+2024-06-14,Dominos,-968.95,Food and Dining,Purchase at Dominos
+2024-06-16,Spotify,-245.67,Entertainment,Purchase at Spotify
+2024-06-17,BSNL,-4342.41,Bills and Utilities,Purchase at BSNL
+2024-06-17,Apollo Pharmacy,-1415.66,Health and Fitness,Purchase at Apollo Pharmacy
+2024-06-19,Book Store,-10943.36,Education,Purchase at Book Store
+2024-06-20,Udemy,-11507.63,Education,Purchase at Udemy
+2024-06-20,BSNL,-3424.08,Bills and Utilities,Purchase at BSNL
+2024-06-21,Stationary Shop,-5407.17,Education,Purchase at Stationary Shop
+2024-06-23,D-Mart,-4350.6,Shopping,Purchase at D-Mart
+2024-06-25,Book Store,-9642.78,Education,Purchase at Book Store
+2024-06-29,Medical Store,-696.42,Health and Fitness,Purchase at Medical Store
+2024-06-29,Diagnostic Center,-2483.79,Health and Fitness,Purchase at Diagnostic Center
+2024-06-29,Spotify,-484.03,Entertainment,Purchase at Spotify
+2024-06-30,Medical Store,-1286.23,Health and Fitness,Purchase at Medical Store
+2024-07-02,Zomato,-1330.55,Food and Dining,Purchase at Zomato
+2024-07-03,Ola,-506.88,Transportation,Purchase at Ola
+2024-07-05,Airtel,-3860.67,Bills and Utilities,Purchase at Airtel
+2024-07-06,Airtel,-4498.25,Bills and Utilities,Purchase at Airtel
+2024-07-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-07-09,D-Mart,-3780.61,Shopping,Purchase at D-Mart
+2024-07-09,Reliance Retail,-2303.53,Shopping,Purchase at Reliance Retail
+2024-07-10,Water Supply,-2679.54,Bills and Utilities,Purchase at Water Supply
+2024-07-11,Food Panda,-832.32,Food and Dining,Purchase at Food Panda
+2024-07-12,McDonald's,-1463.2,Food and Dining,Purchase at McDonald's
+2024-07-12,Coursera,-11735.07,Education,Purchase at Coursera
+2024-07-12,Starbucks,-338.62,Food and Dining,Purchase at Starbucks
+2024-07-12,Electricity Board,-1420.58,Bills and Utilities,Purchase at Electricity Board
+2024-07-12,Netflix,-1121.61,Entertainment,Purchase at Netflix
+2024-07-13,Food Panda,-769.49,Food and Dining,Purchase at Food Panda
+2024-07-16,Amazon Prime,-1799.96,Entertainment,Purchase at Amazon Prime
+2024-07-16,Coursera,-7626.48,Education,Purchase at Coursera
+2024-07-17,Indian Railways,-2701.97,Transportation,Purchase at Indian Railways
+2024-07-18,Petrol Pump,-589.71,Transportation,Purchase at Petrol Pump
+2024-07-18,Reliance Retail,-3101.95,Shopping,Purchase at Reliance Retail
+2024-07-21,Coursera,-4384.2,Education,Purchase at Coursera
+2024-07-22,Electricity Board,-3698.59,Bills and Utilities,Purchase at Electricity Board
+2024-07-23,BSNL,-4354.88,Bills and Utilities,Purchase at BSNL
+2024-07-23,Myntra,-1016.62,Shopping,Purchase at Myntra
+2024-07-24,Jio,-4493.07,Bills and Utilities,Purchase at Jio
+2024-07-24,Amazon Prime,-414.43,Entertainment,Purchase at Amazon Prime
+2024-07-25,Myntra,-4620.41,Shopping,Purchase at Myntra
+2024-07-26,Starbucks,-1175.44,Food and Dining,Purchase at Starbucks
+2024-07-27,Swiggy,-1938.0,Food and Dining,Purchase at Swiggy
+2024-07-28,Gym Membership,-1199.77,Health and Fitness,Purchase at Gym Membership
+2024-07-28,Udemy,-5061.7,Education,Purchase at Udemy
+2024-07-31,BSNL,-750.16,Bills and Utilities,Purchase at BSNL
+2024-08-01,PVR Cinemas,-494.42,Entertainment,Purchase at PVR Cinemas
+2024-08-02,Big Bazaar,-812.62,Shopping,Purchase at Big Bazaar
+2024-08-02,BookMyShow,-1378.51,Entertainment,Purchase at BookMyShow
+2024-08-03,Water Supply,-599.33,Bills and Utilities,Purchase at Water Supply
+2024-08-05,Gym Membership,-1559.3,Health and Fitness,Purchase at Gym Membership
+2024-08-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-08-09,Tata Power,-3726.42,Bills and Utilities,Purchase at Tata Power
+2024-08-10,School Fees,-4762.64,Education,Purchase at School Fees
+2024-08-14,Ola,-414.03,Transportation,Purchase at Ola
+2024-08-14,Udemy,-4497.53,Education,Purchase at Udemy
+2024-08-14,Ola,-2766.75,Transportation,Purchase at Ola
+2024-08-15,Dominos,-888.22,Food and Dining,Purchase at Dominos
+2024-08-17,Gym Membership,-4105.19,Health and Fitness,Purchase at Gym Membership
+2024-08-18,Udemy,-3863.59,Education,Purchase at Udemy
+2024-08-19,School Fees,-5275.96,Education,Purchase at School Fees
+2024-08-19,Amazon Prime,-290.41,Entertainment,Purchase at Amazon Prime
+2024-08-22,Zomato,-1286.85,Food and Dining,Purchase at Zomato
+2024-08-22,Coursera,-2637.37,Education,Purchase at Coursera
+2024-08-22,Zomato,-1357.37,Food and Dining,Purchase at Zomato
+2024-08-22,Dominos,-1573.86,Food and Dining,Purchase at Dominos
+2024-08-23,Metro Card Recharge,-2885.06,Transportation,Purchase at Metro Card Recharge
+2024-08-26,Amazon Prime,-1928.72,Entertainment,Purchase at Amazon Prime
+2024-08-26,BookMyShow,-363.56,Entertainment,Purchase at BookMyShow
+2024-08-26,BSNL,-3675.87,Bills and Utilities,Purchase at BSNL
+2024-08-27,D-Mart,-4109.62,Shopping,Purchase at D-Mart
+2024-08-27,PVR Cinemas,-1151.79,Entertainment,Purchase at PVR Cinemas
+2024-08-27,Dominos,-426.89,Food and Dining,Purchase at Dominos
+2024-08-28,Diagnostic Center,-2704.0,Health and Fitness,Purchase at Diagnostic Center
+2024-08-29,Netflix,-550.23,Entertainment,Purchase at Netflix
+2024-08-30,Big Bazaar,-1018.74,Shopping,Purchase at Big Bazaar
+2024-08-31,Gym Membership,-2309.31,Health and Fitness,Purchase at Gym Membership
+2024-08-31,Petrol Pump,-1881.98,Transportation,Purchase at Petrol Pump
+2024-08-31,Coursera,-6198.7,Education,Purchase at Coursera
+2024-09-01,Amazon,-4192.97,Shopping,Purchase at Amazon
+2024-09-01,Diagnostic Center,-1457.38,Health and Fitness,Purchase at Diagnostic Center
+2024-09-02,Uber,-2769.89,Transportation,Purchase at Uber
+2024-09-05,Uber,-1683.51,Transportation,Purchase at Uber
+2024-09-06,Coursera,-9040.76,Education,Purchase at Coursera
+2024-09-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-09-08,Netflix,-446.05,Entertainment,Purchase at Netflix
+2024-09-09,Starbucks,-1188.52,Food and Dining,Purchase at Starbucks
+2024-09-12,Starbucks,-656.15,Food and Dining,Purchase at Starbucks
+2024-09-13,Zomato,-615.08,Food and Dining,Purchase at Zomato
+2024-09-14,Stationary Shop,-11798.65,Education,Purchase at Stationary Shop
+2024-09-15,Petrol Pump,-1753.99,Transportation,Purchase at Petrol Pump
+2024-09-17,Myntra,-2185.13,Shopping,Purchase at Myntra
+2024-09-17,Starbucks,-1399.31,Food and Dining,Purchase at Starbucks
+2024-09-20,Ola,-247.23,Transportation,Purchase at Ola
+2024-09-20,Big Bazaar,-4177.87,Shopping,Purchase at Big Bazaar
+2024-09-21,School Fees,-5507.91,Education,Purchase at School Fees
+2024-09-23,Book Store,-9350.27,Education,Purchase at Book Store
+2024-09-24,Starbucks,-251.26,Food and Dining,Purchase at Starbucks
+2024-09-24,Reliance Retail,-3917.64,Shopping,Purchase at Reliance Retail
+2024-09-24,Gym Membership,-4594.54,Health and Fitness,Purchase at Gym Membership
+2024-09-24,Indian Railways,-1628.5,Transportation,Purchase at Indian Railways
+2024-09-25,Stationary Shop,-9433.64,Education,Purchase at Stationary Shop
+2024-09-27,Spotify,-1363.32,Entertainment,Purchase at Spotify
+2024-09-28,Apollo Pharmacy,-1748.24,Health and Fitness,Purchase at Apollo Pharmacy
+2024-09-28,Ola,-908.15,Transportation,Purchase at Ola
+2024-09-29,Spotify,-1885.5,Entertainment,Purchase at Spotify
+2024-10-02,Amazon Prime,-1301.32,Entertainment,Purchase at Amazon Prime
+2024-10-04,Book Store,-4245.34,Education,Purchase at Book Store
+2024-10-05,Big Bazaar,-2530.01,Shopping,Purchase at Big Bazaar
+2024-10-05,Medical Store,-4367.42,Health and Fitness,Purchase at Medical Store
+2024-10-06,Stationary Shop,-7348.4,Education,Purchase at Stationary Shop
+2024-10-06,Gym Membership,-3925.36,Health and Fitness,Purchase at Gym Membership
+2024-10-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-10-09,Tata Power,-2224.22,Bills and Utilities,Purchase at Tata Power
+2024-10-09,Starbucks,-833.99,Food and Dining,Purchase at Starbucks
+2024-10-09,Reliance Retail,-3331.56,Shopping,Purchase at Reliance Retail
+2024-10-11,Dominos,-1698.48,Food and Dining,Purchase at Dominos
+2024-10-14,Diagnostic Center,-3308.69,Health and Fitness,Purchase at Diagnostic Center
+2024-10-15,Indian Railways,-2867.03,Transportation,Purchase at Indian Railways
+2024-10-15,Big Bazaar,-19739.0,Shopping,Diwali Shopping
+2024-10-15,Tata Power,-1443.74,Bills and Utilities,Purchase at Tata Power
+2024-10-16,Gym Membership,-2716.26,Health and Fitness,Purchase at Gym Membership
+2024-10-17,Jio,-4781.12,Bills and Utilities,Purchase at Jio
+2024-10-19,Coursera,-7165.62,Education,Purchase at Coursera
+2024-10-21,D-Mart,-1590.34,Shopping,Purchase at D-Mart
+2024-10-22,Ola,-1514.33,Transportation,Purchase at Ola
+2024-10-22,Indian Railways,-2760.17,Transportation,Purchase at Indian Railways
+2024-10-22,Spotify,-1427.88,Entertainment,Purchase at Spotify
+2024-10-23,Electricity Board,-3991.11,Bills and Utilities,Purchase at Electricity Board
+2024-10-24,Diagnostic Center,-3404.48,Health and Fitness,Purchase at Diagnostic Center
+2024-10-24,Udemy,-11192.05,Education,Purchase at Udemy
+2024-10-25,BSNL,-4563.64,Bills and Utilities,Purchase at BSNL
+2024-10-30,Amazon,-4549.7,Shopping,Purchase at Amazon
+2024-10-30,Diagnostic Center,-3022.77,Health and Fitness,Purchase at Diagnostic Center
+2024-10-31,Dominos,-1157.77,Food and Dining,Purchase at Dominos
+2024-10-31,Myntra,-1747.17,Shopping,Purchase at Myntra
+2024-10-31,Diagnostic Center,-4150.97,Health and Fitness,Purchase at Diagnostic Center
+2024-10-31,Medical Store,-1051.59,Health and Fitness,Purchase at Medical Store
+2024-11-01,Tata Power,-1018.33,Bills and Utilities,Purchase at Tata Power
+2024-11-04,Diagnostic Center,-1666.17,Health and Fitness,Purchase at Diagnostic Center
+2024-11-04,Reliance Retail,-1136.32,Shopping,Purchase at Reliance Retail
+2024-11-05,Reliance Retail,-1584.98,Shopping,Purchase at Reliance Retail
+2024-11-05,Uber,-2713.61,Transportation,Purchase at Uber
+2024-11-05,Big Bazaar,-4615.2,Shopping,Purchase at Big Bazaar
+2024-11-06,Coursera,-12137.41,Education,Purchase at Coursera
+2024-11-07,Diagnostic Center,-2278.9,Health and Fitness,Purchase at Diagnostic Center
+2024-11-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-11-08,School Fees,-7926.82,Education,Purchase at School Fees
+2024-11-08,Uber,-1065.57,Transportation,Purchase at Uber
+2024-11-08,D-Mart,-4626.45,Shopping,Purchase at D-Mart
+2024-11-10,Diagnostic Center,-2019.6,Health and Fitness,Purchase at Diagnostic Center
+2024-11-11,Tata Power,-4875.58,Bills and Utilities,Purchase at Tata Power
+2024-11-11,Water Supply,-2079.83,Bills and Utilities,Purchase at Water Supply
+2024-11-13,Flipkart,-1405.14,Shopping,Purchase at Flipkart
+2024-11-14,D-Mart,-4484.94,Shopping,Purchase at D-Mart
+2024-11-18,Diagnostic Center,-3515.61,Health and Fitness,Purchase at Diagnostic Center
+2024-11-21,Swiggy,-1637.55,Food and Dining,Purchase at Swiggy
+2024-11-22,McDonald's,-1399.12,Food and Dining,Purchase at McDonald's
+2024-11-22,Food Panda,-1046.69,Food and Dining,Purchase at Food Panda
+2024-11-25,Book Store,-4939.91,Education,Purchase at Book Store
+2024-11-26,School Fees,-9269.3,Education,Purchase at School Fees
+2024-11-26,Water Supply,-1761.84,Bills and Utilities,Purchase at Water Supply
+2024-11-27,Amazon Prime,-1540.56,Entertainment,Purchase at Amazon Prime
+2024-11-28,Diagnostic Center,-3286.14,Health and Fitness,Purchase at Diagnostic Center
+2024-11-30,Amazon Prime,-1709.59,Entertainment,Purchase at Amazon Prime
+2024-12-02,Stationary Shop,-1148.03,Education,Purchase at Stationary Shop
+2024-12-02,Stationary Shop,-12234.25,Education,Purchase at Stationary Shop
+2024-12-02,Gym Membership,-3997.85,Health and Fitness,Purchase at Gym Membership
+2024-12-03,Electricity Board,-1073.03,Bills and Utilities,Purchase at Electricity Board
+2024-12-05,Ola,-854.8,Transportation,Purchase at Ola
+2024-12-06,Airtel,-2905.99,Bills and Utilities,Purchase at Airtel
+2024-12-06,Big Bazaar,-3718.69,Shopping,Purchase at Big Bazaar
+2024-12-06,Swiggy,-1520.05,Food and Dining,Purchase at Swiggy
+2024-12-07,Food Panda,-295.15,Food and Dining,Purchase at Food Panda
+2024-12-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2024-12-09,Diagnostic Center,-1877.59,Health and Fitness,Purchase at Diagnostic Center
+2024-12-11,Food Panda,-1904.13,Food and Dining,Purchase at Food Panda
+2024-12-11,Petrol Pump,-2331.01,Transportation,Purchase at Petrol Pump
+2024-12-12,Reliance Retail,-2708.44,Shopping,Purchase at Reliance Retail
+2024-12-13,Diagnostic Center,-1848.22,Health and Fitness,Purchase at Diagnostic Center
+2024-12-13,School Fees,-660.92,Education,Purchase at School Fees
+2024-12-15,Ola,-2704.82,Transportation,Purchase at Ola
+2024-12-15,Petrol Pump,-2859.28,Transportation,Purchase at Petrol Pump
+2024-12-15,Airtel,-3367.64,Bills and Utilities,Purchase at Airtel
+2024-12-17,Apollo Pharmacy,-1250.75,Health and Fitness,Purchase at Apollo Pharmacy
+2024-12-17,Amazon,-3708.28,Shopping,Purchase at Amazon
+2024-12-18,Indian Railways,-1053.06,Transportation,Purchase at Indian Railways
+2024-12-18,Netflix,-1100.16,Entertainment,Purchase at Netflix
+2024-12-18,McDonald's,-1771.57,Food and Dining,Purchase at McDonald's
+2024-12-19,Stationary Shop,-13662.66,Education,Purchase at Stationary Shop
+2024-12-19,BSNL,-1304.0,Bills and Utilities,Purchase at BSNL
+2024-12-20,MakeMyTrip,-45209.0,Travel,Year-end Vacation Booking
+2024-12-21,Jio,-3219.9,Bills and Utilities,Purchase at Jio
+2024-12-21,D-Mart,-1903.92,Shopping,Purchase at D-Mart
+2024-12-22,Netflix,-900.55,Entertainment,Purchase at Netflix
+2024-12-23,School Fees,-5658.26,Education,Purchase at School Fees
+2024-12-24,McDonald's,-1001.06,Food and Dining,Purchase at McDonald's
+2024-12-26,BSNL,-1547.54,Bills and Utilities,Purchase at BSNL
+2024-12-27,Water Supply,-2748.36,Bills and Utilities,Purchase at Water Supply
+2024-12-28,D-Mart,-1323.44,Shopping,Purchase at D-Mart
+2024-12-29,Swiggy,-314.29,Food and Dining,Purchase at Swiggy
+2024-12-29,McDonald's,-1195.63,Food and Dining,Purchase at McDonald's
+2024-12-30,Zomato,-306.21,Food and Dining,Purchase at Zomato
+2024-12-31,Indian Railways,-161.55,Transportation,Purchase at Indian Railways
+2025-01-01,Indian Railways,-371.92,Transportation,Purchase at Indian Railways
+2025-01-01,Zomato,-1789.21,Food and Dining,Purchase at Zomato
+2025-01-02,Tata Power,-4573.78,Bills and Utilities,Purchase at Tata Power
+2025-01-04,School Fees,-2267.22,Education,Purchase at School Fees
+2025-01-04,Airtel,-2281.02,Bills and Utilities,Purchase at Airtel
+2025-01-04,Gym Membership,-3156.59,Health and Fitness,Purchase at Gym Membership
+2025-01-05,Ola,-1596.0,Transportation,Purchase at Ola
+2025-01-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-01-08,Swiggy,-1329.78,Food and Dining,Purchase at Swiggy
+2025-01-10,Starbucks,-426.8,Food and Dining,Purchase at Starbucks
+2025-01-12,Amazon Prime,-1604.65,Entertainment,Purchase at Amazon Prime
+2025-01-12,School Fees,-6069.63,Education,Purchase at School Fees
+2025-01-13,Big Bazaar,-3762.97,Shopping,Purchase at Big Bazaar
+2025-01-14,Uber,-1291.81,Transportation,Purchase at Uber
+2025-01-14,Gym Membership,-2149.03,Health and Fitness,Purchase at Gym Membership
+2025-01-16,BookMyShow,-1270.23,Entertainment,Purchase at BookMyShow
+2025-01-19,Book Store,-14555.3,Education,Purchase at Book Store
+2025-01-20,Petrol Pump,-579.53,Transportation,Purchase at Petrol Pump
+2025-01-21,Coursera,-12173.28,Education,Purchase at Coursera
+2025-01-22,Medical Store,-4535.54,Health and Fitness,Purchase at Medical Store
+2025-01-23,Netflix,-322.56,Entertainment,Purchase at Netflix
+2025-01-23,Flipkart,-4915.97,Shopping,Purchase at Flipkart
+2025-01-24,Medical Store,-4940.51,Health and Fitness,Purchase at Medical Store
+2025-01-24,McDonald's,-1654.83,Food and Dining,Purchase at McDonald's
+2025-01-25,Dominos,-1895.93,Food and Dining,Purchase at Dominos
+2025-01-27,Water Supply,-3758.4,Bills and Utilities,Purchase at Water Supply
+2025-01-27,Book Store,-576.19,Education,Purchase at Book Store
+2025-01-27,Book Store,-10700.37,Education,Purchase at Book Store
+2025-01-28,Petrol Pump,-468.27,Transportation,Purchase at Petrol Pump
+2025-01-29,Ola,-613.22,Transportation,Purchase at Ola
+2025-01-30,Indian Railways,-970.02,Transportation,Purchase at Indian Railways
+2025-01-31,Book Store,-7482.64,Education,Purchase at Book Store
+2025-02-02,BookMyShow,-600.21,Entertainment,Purchase at BookMyShow
+2025-02-03,Spotify,-750.37,Entertainment,Purchase at Spotify
+2025-02-03,Airtel,-2978.86,Bills and Utilities,Purchase at Airtel
+2025-02-04,Starbucks,-1846.49,Food and Dining,Purchase at Starbucks
+2025-02-04,Amazon Prime,-1326.38,Entertainment,Purchase at Amazon Prime
+2025-02-05,D-Mart,-3416.37,Shopping,Purchase at D-Mart
+2025-02-06,Medical Store,-4894.66,Health and Fitness,Purchase at Medical Store
+2025-02-06,Book Store,-14027.53,Education,Purchase at Book Store
+2025-02-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-02-08,Tata Power,-1831.81,Bills and Utilities,Purchase at Tata Power
+2025-02-08,Petrol Pump,-1970.81,Transportation,Purchase at Petrol Pump
+2025-02-09,Big Bazaar,-833.35,Shopping,Purchase at Big Bazaar
+2025-02-10,Jio,-1188.3,Bills and Utilities,Purchase at Jio
+2025-02-14,Reliance Retail,-2081.57,Shopping,Purchase at Reliance Retail
+2025-02-17,Indian Railways,-953.34,Transportation,Purchase at Indian Railways
+2025-02-18,Jio,-2418.24,Bills and Utilities,Purchase at Jio
+2025-02-20,Electricity Board,-707.91,Bills and Utilities,Purchase at Electricity Board
+2025-02-20,Gym Membership,-4431.66,Health and Fitness,Purchase at Gym Membership
+2025-02-21,Ola,-2938.92,Transportation,Purchase at Ola
+2025-02-21,Book Store,-1149.97,Education,Purchase at Book Store
+2025-02-21,BookMyShow,-1859.52,Entertainment,Purchase at BookMyShow
+2025-02-22,Ola,-2863.97,Transportation,Purchase at Ola
+2025-02-23,Flipkart,-4053.32,Shopping,Purchase at Flipkart
+2025-02-24,Diagnostic Center,-3893.86,Health and Fitness,Purchase at Diagnostic Center
+2025-02-25,Spotify,-1946.84,Entertainment,Purchase at Spotify
+2025-02-26,Tata Power,-4853.86,Bills and Utilities,Purchase at Tata Power
+2025-02-26,Swiggy,-754.3,Food and Dining,Purchase at Swiggy
+2025-02-27,Apollo Pharmacy,-1280.08,Health and Fitness,Purchase at Apollo Pharmacy
+2025-02-28,Water Supply,-3290.44,Bills and Utilities,Purchase at Water Supply
+2025-02-28,School Fees,-1242.84,Education,Purchase at School Fees
+2025-02-28,Gym Membership,-1743.34,Health and Fitness,Purchase at Gym Membership
+2025-03-01,BookMyShow,-821.22,Entertainment,Purchase at BookMyShow
+2025-03-02,Apollo Pharmacy,-2650.71,Health and Fitness,Purchase at Apollo Pharmacy
+2025-03-04,BookMyShow,-831.17,Entertainment,Purchase at BookMyShow
+2025-03-04,Ola,-2555.72,Transportation,Purchase at Ola
+2025-03-04,Ola,-1706.77,Transportation,Purchase at Ola
+2025-03-05,Indian Railways,-953.96,Transportation,Purchase at Indian Railways
+2025-03-06,Metro Card Recharge,-340.26,Transportation,Purchase at Metro Card Recharge
+2025-03-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-03-07,Myntra,-1285.28,Shopping,Purchase at Myntra
+2025-03-08,Petrol Pump,-175.31,Transportation,Purchase at Petrol Pump
+2025-03-10,Starbucks,-1009.3,Food and Dining,Purchase at Starbucks
+2025-03-13,Udemy,-10047.82,Education,Purchase at Udemy
+2025-03-13,Udemy,-7158.01,Education,Purchase at Udemy
+2025-03-15,Ola,-1026.24,Transportation,Purchase at Ola
+2025-03-17,Dominos,-1838.62,Food and Dining,Purchase at Dominos
+2025-03-17,D-Mart,-2104.36,Shopping,Purchase at D-Mart
+2025-03-19,Medical Store,-3219.97,Health and Fitness,Purchase at Medical Store
+2025-03-20,Electricity Board,-4928.94,Bills and Utilities,Purchase at Electricity Board
+2025-03-21,Ola,-781.79,Transportation,Purchase at Ola
+2025-03-22,Gym Membership,-2409.08,Health and Fitness,Purchase at Gym Membership
+2025-03-22,Udemy,-8620.55,Education,Purchase at Udemy
+2025-03-23,Medical Store,-1504.95,Health and Fitness,Purchase at Medical Store
+2025-03-23,McDonald's,-1656.97,Food and Dining,Purchase at McDonald's
+2025-03-23,Coursera,-9009.07,Education,Purchase at Coursera
+2025-03-23,School Fees,-512.28,Education,Purchase at School Fees
+2025-03-24,Starbucks,-1349.93,Food and Dining,Purchase at Starbucks
+2025-03-24,Metro Card Recharge,-1128.96,Transportation,Purchase at Metro Card Recharge
+2025-03-24,Ola,-725.63,Transportation,Purchase at Ola
+2025-03-25,Apollo Pharmacy,-899.81,Health and Fitness,Purchase at Apollo Pharmacy
+2025-03-25,Apollo Pharmacy,-1349.2,Health and Fitness,Purchase at Apollo Pharmacy
+2025-03-26,Udemy,-2782.68,Education,Purchase at Udemy
+2025-03-28,Metro Card Recharge,-1823.17,Transportation,Purchase at Metro Card Recharge
+2025-03-29,Swiggy,-242.6,Food and Dining,Purchase at Swiggy
+2025-03-31,Tata Power,-1124.57,Bills and Utilities,Purchase at Tata Power
+2025-04-01,Indian Railways,-382.25,Transportation,Purchase at Indian Railways
+2025-04-01,Indian Railways,-1614.46,Transportation,Purchase at Indian Railways
+2025-04-03,Water Supply,-3591.47,Bills and Utilities,Purchase at Water Supply
+2025-04-03,School Fees,-6455.43,Education,Purchase at School Fees
+2025-04-04,Medical Store,-709.45,Health and Fitness,Purchase at Medical Store
+2025-04-06,Dominos,-1677.67,Food and Dining,Purchase at Dominos
+2025-04-06,Jio,-1895.36,Bills and Utilities,Purchase at Jio
+2025-04-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-04-10,McDonald's,-445.13,Food and Dining,Purchase at McDonald's
+2025-04-11,Gym Membership,-1687.55,Health and Fitness,Purchase at Gym Membership
+2025-04-13,Diagnostic Center,-4698.2,Health and Fitness,Purchase at Diagnostic Center
+2025-04-13,Swiggy,-264.68,Food and Dining,Purchase at Swiggy
+2025-04-15,Water Supply,-2565.24,Bills and Utilities,Purchase at Water Supply
+2025-04-17,Ola,-459.84,Transportation,Purchase at Ola
+2025-04-19,Medical Store,-3098.43,Health and Fitness,Purchase at Medical Store
+2025-04-20,Netflix,-1821.14,Entertainment,Purchase at Netflix
+2025-04-21,D-Mart,-3387.8,Shopping,Purchase at D-Mart
+2025-04-21,Food Panda,-214.05,Food and Dining,Purchase at Food Panda
+2025-04-22,Stationary Shop,-11264.81,Education,Purchase at Stationary Shop
+2025-04-22,McDonald's,-542.39,Food and Dining,Purchase at McDonald's
+2025-04-23,Big Bazaar,-3161.03,Shopping,Purchase at Big Bazaar
+2025-04-24,Medical Store,-1723.47,Health and Fitness,Purchase at Medical Store
+2025-04-25,Jio,-4599.01,Bills and Utilities,Purchase at Jio
+2025-04-25,Ola,-964.51,Transportation,Purchase at Ola
+2025-04-25,Coursera,-3621.55,Education,Purchase at Coursera
+2025-04-25,Book Store,-6347.07,Education,Purchase at Book Store
+2025-04-27,Diagnostic Center,-4148.31,Health and Fitness,Purchase at Diagnostic Center
+2025-04-27,Starbucks,-1073.24,Food and Dining,Purchase at Starbucks
+2025-04-28,Myntra,-1870.72,Shopping,Purchase at Myntra
+2025-04-28,PVR Cinemas,-570.58,Entertainment,Purchase at PVR Cinemas
+2025-04-29,Indian Railways,-1506.3,Transportation,Purchase at Indian Railways
+2025-04-30,Uber,-116.6,Transportation,Purchase at Uber
+2025-05-03,Metro Card Recharge,-1987.44,Transportation,Purchase at Metro Card Recharge
+2025-05-03,Medical Store,-4688.11,Health and Fitness,Purchase at Medical Store
+2025-05-03,Reliance Retail,-4497.27,Shopping,Purchase at Reliance Retail
+2025-05-03,BookMyShow,-1592.55,Entertainment,Purchase at BookMyShow
+2025-05-06,Amazon Prime,-1645.88,Entertainment,Purchase at Amazon Prime
+2025-05-06,Starbucks,-368.58,Food and Dining,Purchase at Starbucks
+2025-05-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-05-07,Swiggy,-579.6,Food and Dining,Purchase at Swiggy
+2025-05-08,Coursera,-6432.35,Education,Purchase at Coursera
+2025-05-08,Dominos,-1503.88,Food and Dining,Purchase at Dominos
+2025-05-09,Jio,-4751.91,Bills and Utilities,Purchase at Jio
+2025-05-09,Flipkart,-3249.55,Shopping,Purchase at Flipkart
+2025-05-10,Medical Store,-2427.63,Health and Fitness,Purchase at Medical Store
+2025-05-11,Electricity Board,-3923.5,Bills and Utilities,Purchase at Electricity Board
+2025-05-12,Medical Store,-1430.77,Health and Fitness,Purchase at Medical Store
+2025-05-12,Amazon Prime,-1534.16,Entertainment,Purchase at Amazon Prime
+2025-05-13,Flipkart,-886.49,Shopping,Purchase at Flipkart
+2025-05-15,Netflix,-1504.51,Entertainment,Purchase at Netflix
+2025-05-16,Uber,-2966.9,Transportation,Purchase at Uber
+2025-05-20,D-Mart,-1795.37,Shopping,Purchase at D-Mart
+2025-05-21,Gym Membership,-2738.12,Health and Fitness,Purchase at Gym Membership
+2025-05-21,Reliance Retail,-3711.96,Shopping,Purchase at Reliance Retail
+2025-05-21,D-Mart,-2112.14,Shopping,Purchase at D-Mart
+2025-05-23,McDonald's,-1914.59,Food and Dining,Purchase at McDonald's
+2025-05-24,Apollo Pharmacy,-1358.54,Health and Fitness,Purchase at Apollo Pharmacy
+2025-05-25,PVR Cinemas,-1288.12,Entertainment,Purchase at PVR Cinemas
+2025-05-25,Udemy,-14076.93,Education,Purchase at Udemy
+2025-05-26,Amazon Prime,-1098.12,Entertainment,Purchase at Amazon Prime
+2025-05-26,Tata Power,-3680.29,Bills and Utilities,Purchase at Tata Power
+2025-05-26,Petrol Pump,-1649.79,Transportation,Purchase at Petrol Pump
+2025-05-27,Petrol Pump,-2648.66,Transportation,Purchase at Petrol Pump
+2025-05-29,Zomato,-796.29,Food and Dining,Purchase at Zomato
+2025-05-31,Tata Power,-3609.26,Bills and Utilities,Purchase at Tata Power
+2025-06-02,Myntra,-4669.08,Shopping,Purchase at Myntra
+2025-06-02,Petrol Pump,-130.67,Transportation,Purchase at Petrol Pump
+2025-06-02,Netflix,-1161.25,Entertainment,Purchase at Netflix
+2025-06-05,Tata Power,-3519.31,Bills and Utilities,Purchase at Tata Power
+2025-06-06,Medical Store,-737.82,Health and Fitness,Purchase at Medical Store
+2025-06-06,BSNL,-1021.99,Bills and Utilities,Purchase at BSNL
+2025-06-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-06-07,Diagnostic Center,-4811.06,Health and Fitness,Purchase at Diagnostic Center
+2025-06-08,Airtel,-1799.82,Bills and Utilities,Purchase at Airtel
+2025-06-09,Netflix,-1921.57,Entertainment,Purchase at Netflix
+2025-06-09,BSNL,-1805.22,Bills and Utilities,Purchase at BSNL
+2025-06-10,Diagnostic Center,-4566.86,Health and Fitness,Purchase at Diagnostic Center
+2025-06-14,Spotify,-1424.56,Entertainment,Purchase at Spotify
+2025-06-14,BSNL,-4307.28,Bills and Utilities,Purchase at BSNL
+2025-06-16,Ola,-2079.11,Transportation,Purchase at Ola
+2025-06-18,Amazon,-1690.52,Shopping,Purchase at Amazon
+2025-06-18,Jio,-4057.69,Bills and Utilities,Purchase at Jio
+2025-06-19,Medical Store,-4048.01,Health and Fitness,Purchase at Medical Store
+2025-06-19,BookMyShow,-1111.51,Entertainment,Purchase at BookMyShow
+2025-06-20,Amazon Prime,-1623.08,Entertainment,Purchase at Amazon Prime
+2025-06-21,McDonald's,-344.61,Food and Dining,Purchase at McDonald's
+2025-06-22,D-Mart,-4115.0,Shopping,Purchase at D-Mart
+2025-06-22,Dominos,-1329.03,Food and Dining,Purchase at Dominos
+2025-06-22,Medical Store,-3409.64,Health and Fitness,Purchase at Medical Store
+2025-06-23,Gym Membership,-3371.07,Health and Fitness,Purchase at Gym Membership
+2025-06-23,Coursera,-8277.35,Education,Purchase at Coursera
+2025-06-24,Petrol Pump,-122.99,Transportation,Purchase at Petrol Pump
+2025-06-24,Flipkart,-1621.57,Shopping,Purchase at Flipkart
+2025-06-25,Indian Railways,-2139.3,Transportation,Purchase at Indian Railways
+2025-06-25,Myntra,-3086.53,Shopping,Purchase at Myntra
+2025-06-27,Petrol Pump,-1546.81,Transportation,Purchase at Petrol Pump
+2025-06-27,Medical Store,-1622.45,Health and Fitness,Purchase at Medical Store
+2025-06-27,Reliance Retail,-3565.41,Shopping,Purchase at Reliance Retail
+2025-06-27,Food Panda,-1328.15,Food and Dining,Purchase at Food Panda
+2025-06-29,Diagnostic Center,-4729.36,Health and Fitness,Purchase at Diagnostic Center
+2025-06-29,Apollo Pharmacy,-4705.07,Health and Fitness,Purchase at Apollo Pharmacy
+2025-06-30,Electricity Board,-614.82,Bills and Utilities,Purchase at Electricity Board
+2025-07-02,Stationary Shop,-2782.21,Education,Purchase at Stationary Shop
+2025-07-03,Stationary Shop,-2695.87,Education,Purchase at Stationary Shop
+2025-07-06,Water Supply,-4158.46,Bills and Utilities,Purchase at Water Supply
+2025-07-06,Swiggy,-1095.94,Food and Dining,Purchase at Swiggy
+2025-07-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-07-10,PVR Cinemas,-294.46,Entertainment,Purchase at PVR Cinemas
+2025-07-10,BookMyShow,-716.99,Entertainment,Purchase at BookMyShow
+2025-07-11,Starbucks,-667.08,Food and Dining,Purchase at Starbucks
+2025-07-11,Metro Card Recharge,-519.75,Transportation,Purchase at Metro Card Recharge
+2025-07-12,Netflix,-1877.58,Entertainment,Purchase at Netflix
+2025-07-12,Amazon Prime,-1978.6,Entertainment,Purchase at Amazon Prime
+2025-07-13,Udemy,-4300.47,Education,Purchase at Udemy
+2025-07-14,BookMyShow,-414.95,Entertainment,Purchase at BookMyShow
+2025-07-14,Stationary Shop,-9464.39,Education,Purchase at Stationary Shop
+2025-07-16,Udemy,-10380.9,Education,Purchase at Udemy
+2025-07-19,School Fees,-9931.65,Education,Purchase at School Fees
+2025-07-20,Gym Membership,-4876.63,Health and Fitness,Purchase at Gym Membership
+2025-07-21,Amazon Prime,-1464.28,Entertainment,Purchase at Amazon Prime
+2025-07-21,BSNL,-4840.81,Bills and Utilities,Purchase at BSNL
+2025-07-28,Diagnostic Center,-2576.42,Health and Fitness,Purchase at Diagnostic Center
+2025-07-28,Metro Card Recharge,-566.11,Transportation,Purchase at Metro Card Recharge
+2025-07-28,Book Store,-3376.37,Education,Purchase at Book Store
+2025-07-30,Stationary Shop,-2078.27,Education,Purchase at Stationary Shop
+2025-07-30,Medical Store,-4260.98,Health and Fitness,Purchase at Medical Store
+2025-08-01,BSNL,-732.92,Bills and Utilities,Purchase at BSNL
+2025-08-03,Netflix,-1812.42,Entertainment,Purchase at Netflix
+2025-08-04,Diagnostic Center,-4818.72,Health and Fitness,Purchase at Diagnostic Center
+2025-08-05,Spotify,-1691.59,Entertainment,Purchase at Spotify
+2025-08-05,Airtel,-716.94,Bills and Utilities,Purchase at Airtel
+2025-08-05,Apollo Pharmacy,-4118.23,Health and Fitness,Purchase at Apollo Pharmacy
+2025-08-06,McDonald's,-1932.79,Food and Dining,Purchase at McDonald's
+2025-08-07,Gym Membership,-1323.55,Health and Fitness,Purchase at Gym Membership
+2025-08-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-08-08,Reliance Retail,-2675.47,Shopping,Purchase at Reliance Retail
+2025-08-09,Medical Store,-4072.12,Health and Fitness,Purchase at Medical Store
+2025-08-09,Food Panda,-1883.77,Food and Dining,Purchase at Food Panda
+2025-08-11,Diagnostic Center,-2966.18,Health and Fitness,Purchase at Diagnostic Center
+2025-08-12,Big Bazaar,-1885.38,Shopping,Purchase at Big Bazaar
+2025-08-13,Gym Membership,-2205.03,Health and Fitness,Purchase at Gym Membership
+2025-08-14,D-Mart,-2823.73,Shopping,Purchase at D-Mart
+2025-08-16,Netflix,-1780.34,Entertainment,Purchase at Netflix
+2025-08-17,Amazon,-2699.64,Shopping,Purchase at Amazon
+2025-08-18,Swiggy,-1965.71,Food and Dining,Purchase at Swiggy
+2025-08-18,Big Bazaar,-2206.16,Shopping,Purchase at Big Bazaar
+2025-08-18,Ola,-914.36,Transportation,Purchase at Ola
+2025-08-20,McDonald's,-1107.91,Food and Dining,Purchase at McDonald's
+2025-08-20,Food Panda,-1099.07,Food and Dining,Purchase at Food Panda
+2025-08-22,Udemy,-14163.46,Education,Purchase at Udemy
+2025-08-22,Indian Railways,-2972.68,Transportation,Purchase at Indian Railways
+2025-08-26,Metro Card Recharge,-1763.78,Transportation,Purchase at Metro Card Recharge
+2025-08-28,Indian Railways,-384.38,Transportation,Purchase at Indian Railways
+2025-08-28,Gym Membership,-713.96,Health and Fitness,Purchase at Gym Membership
+2025-08-29,Electricity Board,-3273.65,Bills and Utilities,Purchase at Electricity Board
+2025-08-29,Reliance Retail,-958.99,Shopping,Purchase at Reliance Retail
+2025-08-29,BSNL,-4634.78,Bills and Utilities,Purchase at BSNL
+2025-08-31,Petrol Pump,-200.97,Transportation,Purchase at Petrol Pump
+2025-08-31,Reliance Retail,-863.07,Shopping,Purchase at Reliance Retail
+2025-08-31,BookMyShow,-1055.43,Entertainment,Purchase at BookMyShow
+2025-09-01,Udemy,-12623.43,Education,Purchase at Udemy
+2025-09-01,Medical Store,-3866.46,Health and Fitness,Purchase at Medical Store
+2025-09-02,Gym Membership,-2570.5,Health and Fitness,Purchase at Gym Membership
+2025-09-02,Apollo Pharmacy,-3031.09,Health and Fitness,Purchase at Apollo Pharmacy
+2025-09-05,Gym Membership,-647.94,Health and Fitness,Purchase at Gym Membership
+2025-09-05,Zomato,-1506.65,Food and Dining,Purchase at Zomato
+2025-09-05,Dominos,-306.55,Food and Dining,Purchase at Dominos
+2025-09-06,Swiggy,-570.23,Food and Dining,Purchase at Swiggy
+2025-09-07,Zomato,-1719.18,Food and Dining,Purchase at Zomato
+2025-09-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-09-07,Water Supply,-4888.14,Bills and Utilities,Purchase at Water Supply
+2025-09-07,Coursera,-11357.76,Education,Purchase at Coursera
+2025-09-08,Airtel,-2035.31,Bills and Utilities,Purchase at Airtel
+2025-09-08,Spotify,-1409.28,Entertainment,Purchase at Spotify
+2025-09-09,Tata Power,-3717.71,Bills and Utilities,Purchase at Tata Power
+2025-09-09,Big Bazaar,-2347.68,Shopping,Purchase at Big Bazaar
+2025-09-10,Petrol Pump,-562.49,Transportation,Purchase at Petrol Pump
+2025-09-12,Flipkart,-2021.58,Shopping,Purchase at Flipkart
+2025-09-12,Diagnostic Center,-4429.92,Health and Fitness,Purchase at Diagnostic Center
+2025-09-12,BSNL,-2521.67,Bills and Utilities,Purchase at BSNL
+2025-09-13,Swiggy,-1417.14,Food and Dining,Purchase at Swiggy
+2025-09-15,Metro Card Recharge,-1475.9,Transportation,Purchase at Metro Card Recharge
+2025-09-16,BookMyShow,-717.01,Entertainment,Purchase at BookMyShow
+2025-09-16,Electricity Board,-4356.16,Bills and Utilities,Purchase at Electricity Board
+2025-09-17,Udemy,-9674.83,Education,Purchase at Udemy
+2025-09-21,Tata Power,-3226.33,Bills and Utilities,Purchase at Tata Power
+2025-09-22,BookMyShow,-1712.19,Entertainment,Purchase at BookMyShow
+2025-09-23,Book Store,-11199.4,Education,Purchase at Book Store
+2025-09-23,Electricity Board,-1861.69,Bills and Utilities,Purchase at Electricity Board
+2025-09-24,Water Supply,-1920.45,Bills and Utilities,Purchase at Water Supply
+2025-09-24,Petrol Pump,-958.42,Transportation,Purchase at Petrol Pump
+2025-09-25,Stationary Shop,-5373.38,Education,Purchase at Stationary Shop
+2025-09-25,Ola,-2586.7,Transportation,Purchase at Ola
+2025-09-26,Apollo Pharmacy,-2344.17,Health and Fitness,Purchase at Apollo Pharmacy
+2025-09-27,Medical Store,-803.69,Health and Fitness,Purchase at Medical Store
+2025-09-28,Gym Membership,-2971.81,Health and Fitness,Purchase at Gym Membership
+2025-09-28,D-Mart,-3881.33,Shopping,Purchase at D-Mart
+2025-09-29,Petrol Pump,-1989.93,Transportation,Purchase at Petrol Pump
+2025-09-29,McDonald's,-740.05,Food and Dining,Purchase at McDonald's
+2025-10-01,Jio,-894.61,Bills and Utilities,Purchase at Jio
+2025-10-01,Food Panda,-1621.47,Food and Dining,Purchase at Food Panda
+2025-10-01,Amazon,-1999.01,Shopping,Purchase at Amazon
+2025-10-02,McDonald's,-465.37,Food and Dining,Purchase at McDonald's
+2025-10-03,Diagnostic Center,-4405.83,Health and Fitness,Purchase at Diagnostic Center
+2025-10-03,Swiggy,-464.22,Food and Dining,Purchase at Swiggy
+2025-10-04,Jio,-3479.35,Bills and Utilities,Purchase at Jio
+2025-10-04,BSNL,-1204.54,Bills and Utilities,Purchase at BSNL
+2025-10-04,Flipkart,-3013.13,Shopping,Purchase at Flipkart
+2025-10-07,Salary Credit,58328.0,Income,Monthly Salary Credit
+2025-10-09,Amazon Prime,-1490.37,Entertainment,Purchase at Amazon Prime
+2025-10-13,Coursera,-5502.72,Education,Purchase at Coursera
+2025-10-14,Netflix,-795.42,Entertainment,Purchase at Netflix
+2025-10-18,BSNL,-1627.22,Bills and Utilities,Purchase at BSNL
+2025-10-20,Metro Card Recharge,-712.59,Transportation,Purchase at Metro Card Recharge
+2025-10-21,Uber,-212.87,Transportation,Purchase at Uber
+2025-10-21,Electricity Board,-997.6,Bills and Utilities,Purchase at Electricity Board
+2025-10-21,Food Panda,-802.8,Food and Dining,Purchase at Food Panda
+2025-10-25,Spotify,-824.54,Entertainment,Purchase at Spotify
+2025-10-28,PVR Cinemas,-1590.25,Entertainment,Purchase at PVR Cinemas
+2025-10-29,Jio,-2687.01,Bills and Utilities,Purchase at Jio
+2025-10-29,Jio,-1791.96,Bills and Utilities,Purchase at Jio
+2025-10-31,BookMyShow,-671.29,Entertainment,Purchase at BookMyShow
+2025-10-31,Dominos,-773.58,Food and Dining,Purchase at Dominos
+2025-11-02,Book Store,-9444.07,Education,Purchase at Book Store
+2025-11-04,Amazon Prime,-358.97,Entertainment,Purchase at Amazon Prime
+2025-11-04,Myntra,-993.21,Shopping,Purchase at Myntra

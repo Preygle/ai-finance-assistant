@@ -61,3 +61,10 @@ class CSVProcessForm(FlaskForm):
                                  ('GBP', 'British Pound (GBP)')],
                          default='INR')
     submit = SubmitField('Process Transactions')
+
+class ReceiptUploadForm(FlaskForm):
+    receipt_file = FileField('Receipt File', validators=[
+        FileRequired(),
+        FileAllowed(['png', 'jpg', 'jpeg', 'pdf'], 'Only image or PDF files are allowed!')
+    ])
+    submit = SubmitField('Upload and Analyze')

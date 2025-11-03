@@ -14,6 +14,7 @@ DEPLOYED_FILE = "deployed.json"
 w3 = Web3(Web3.HTTPProvider(GANACHE_URL))
 w3.eth.default_account = w3.eth.accounts[0]
 
+
 def _compile_contract():
     """Compiles the Solidity contract."""
     install_solc(version='0.8.0')
@@ -22,6 +23,7 @@ def _compile_contract():
     compiled_sol = compile_source(source, output_values=['abi', 'bin'])
     contract_id, contract_interface = compiled_sol.popitem()
     return contract_interface['abi'], contract_interface['bin']
+
 
 def deploy_contract():
     """
@@ -50,30 +52,34 @@ def deploy_contract():
 
     return deployment_data
 
+
 def get_contract():
     """Gets the deployed contract instance."""
     if not os.path.exists(DEPLOYED_FILE):
-        raise FileNotFoundError("Contract not deployed. Run deploy_contract() first.")
-    
+        raise FileNotFoundError(
+            "Contract not deployed. Run deploy_contract() first.")
+
     with open(DEPLOYED_FILE, 'r') as f:
         deployment_data = json.load(f)
-    
+
     contract = w3.eth.contract(
         address=deployment_data['address'],
         abi=deployment_data['abi']
     )
     return contract
 
+
 def log_transaction_to_chain(transaction):
     """
     Hashes a transaction and logs it to the blockchain.
-    
+
     Args:
         transaction (dict): A dictionary representing the transaction.
-                            Example: {'merchant': 'Test', 'amount': 100, 'category': 'Test'}
+                            Example: {'merchant': 'Test',
+                                'amount': 100, 'category': 'Test'}
     """
     contract = get_contract()
-    
+
     # Create a stable hash
     txn_string = json.dumps(transaction, sort_keys=True)
     txn_hash = hashlib.sha256(txn_string.encode()).hexdigest()
@@ -86,30 +92,10 @@ def log_transaction_to_chain(transaction):
             txn_hash
         ).transact()
         w3.eth.wait_for_transaction_receipt(tx_hash)
-        return txn_hash
+        return txn_hash, tx_hash
     except Exception as e:
-        print(f"Error logging transaction to blockchain: {e}")
-        return None
-
-def get_logged_events():
-    """
-    Fetches and decodes all 'TransactionLogged' events from the blockchain.
-    """
-    contract = get_contract()
-    event_filter = contract.events.TransactionLogged.create_filter(from_block=0)
-    logs = event_filter.get_all_entries()
-    
-    events = []
-    for log in logs:
-        events.append({
-            'merchant': log.args.merchant,
-            'amount': log.args.amount,
-            'category': log.args.category,
-            'hash': log.args.hash,
-            'timestamp': log.args.timestamp
-        })
-        
-    return events
+                print(f"Error logging transaction to blockchain: {e}")
+                return None, None
 
 # --- Initial Deployment ---
 if __name__ == "__main__":

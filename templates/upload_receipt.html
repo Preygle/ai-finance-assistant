@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Receipt{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">Upload a Receipt</h1>
+    <p class="page-subtitle">Upload an image of your receipt (JPG, PNG, or PDF) to automatically extract transaction details.</p>
+
+    <!-- Upload Form -->
+    <div class="form-container card mb-5">
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }} <!-- Includes CSRF token -->
+            
+            <div class="form-group">
+                {{ form.receipt_file.label(class="form-label") }}
+                {{ form.receipt_file(class="form-control") }}
+                {% for error in form.receipt_file.errors %}
+                    <span class="error-message">{{ error }}</span>
+                {% endfor %}
+            </div>
+            
+            {{ form.submit(class="btn btn-primary btn-block") }}
+        </form>
+    </div>
+</div>
+{% endblock %}

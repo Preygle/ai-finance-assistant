@@ -64,10 +64,23 @@ class AIModelStorage(db.Model):
 class IntegrityProof(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    transaction_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=False)
     txn_hash = db.Column(db.String(128), nullable=False)  # SHA-256 hex
     chain_tx_hash = db.Column(db.String(128), nullable=True)
     chain = db.Column(db.String(64), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    transaction = db.relationship('Transaction', backref='integrity_proofs')
+
+
+class BlockchainLog(db.Model):
+    """Links a stored Transaction to the on-chain transaction hash."""
+    id = db.Column(db.Integer, primary_key=True)
+    txn_id = db.Column(db.Integer, db.ForeignKey('transaction.id'), nullable=False)
+    chain_tx_hash = db.Column(db.String(128), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    transaction = db.relationship('Transaction', backref=db.backref('blockchain_logs', lazy=True))
 
 class TransactionAIFiltered(db.Model):
     id = db.Column(db.Integer, primary_key=True)

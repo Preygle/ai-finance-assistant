@@ -4,7 +4,11 @@ import os
 import pandas as pd
 from datetime import datetime, timedelta
 import logging
-from forms import RegistrationForm, LoginForm, CSVUploadForm, CSVProcessForm
+import json
+import hashlib
+import hashlib
+from forms import RegistrationForm, LoginForm, CSVUploadForm, CSVProcessForm, ReceiptUploadForm
+import boto3
 from extensions import db, migrate, csrf, login_manager, jwt
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, JWTManager, verify_jwt_in_request
@@ -15,7 +19,8 @@ from ai_service import AICategorizer, FraudDetector
 from finance_analyzer import FinanceAnalyzerAI
 # Bedrock integration helper (generates AI-powered insights when configured)
 from bedrock_integration import generate_insights_bedrock
-from blockchain_logger import deploy_contract, log_transaction_to_chain, get_logged_events
+from blockchain_logger import deploy_contract, log_transaction_to_chain
+from receipt_processing.processor import process_receipt
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -23,21 +28,34 @@ logging.basicConfig(level=logging.DEBUG)
 # Load environment variables from .env file
 load_dotenv()
 
-def get_utc_now():
-    """Get current UTC time as timezone-naive datetime"""
-    return datetime.utcnow()
 
-def ensure_naive_datetime(dt):
-    """Ensure datetime is timezone-naive"""
+def get_utc_now():
+    """Get current UTC time as timezone-aware datetime"""
+    from datetime import timezone
+    return datetime.now(timezone.utc)
+
+
+def ensure_utc_datetime(dt):
+    """Ensure datetime is UTC timezone-aware"""
+    from datetime import timezone
     if dt is None:
         return None
     if isinstance(dt, str):
-        # If stored as string, parse it
-        dt = datetime.fromisoformat(dt)
-    if dt.tzinfo is not None:
-        # If timezone-aware, convert to naive
-        dt = dt.replace(tzinfo=None)
+        # If stored as string, parse it (assume UTC)
+        try:
+            dt = datetime.fromisoformat(dt)
+        except ValueError:
+            # Handle basic ISO format without timezone
+            dt = datetime.fromisoformat(dt.replace('Z', '+00:00'))
+    
+    # Make timezone-aware if naive
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    # Convert to UTC if in different timezone
+    elif dt.tzinfo != timezone.utc:
+        dt = dt.astimezone(timezone.utc)
     return dt
+
 
 def create_app():
     """Create and configure an instance of the Flask application."""
@@ -117,25 +135,41 @@ def create_app():
     ai_categorizer = AICategorizer()
     fraud_detector = FraudDetector()
     finance_analyzer = FinanceAnalyzerAI()
-
     # Session timeout middleware
     @app.before_request
     def check_session_timeout():
-        # Skip timeout check for login, register, and static files
-        if request.endpoint in ['login', 'register', 'static'] or request.path.startswith('/static/'):
+        # Skip timeout check for static files and specific endpoints
+        if (request.endpoint in ['login', 'register', 'static', 'session_timeout'] or 
+            request.path.startswith('/static/') or
+            'timeout=1' in request.url):
             return
-        
+
         # Check if user is authenticated
         if current_user.is_authenticated:
+            now = get_utc_now()
+            
             # Check if session has expired (30 minutes)
             if 'last_activity' in session:
-                last_activity = ensure_naive_datetime(session['last_activity'])
-                
-                if get_utc_now() - last_activity > timedelta(minutes=30):
-                    return redirect(url_for('session_timeout'))
-            
-            # Update last activity time (store as timezone-naive)
-            session['last_activity'] = get_utc_now()
+                try:
+                    # Convert the stored timestamp to datetime
+                    if isinstance(session['last_activity'], str):
+                        last_activity = ensure_utc_datetime(session['last_activity'])
+                    else:
+                        last_activity = ensure_utc_datetime(session['last_activity'].isoformat())
+                        
+                    if (now - last_activity) > timedelta(minutes=30):
+                        logging.info(f"Session expired - last activity: {last_activity}, current time: {now}")
+                        session.clear()
+                        logout_user()
+                        return redirect(url_for('login', timeout=1))
+                except Exception as e:
+                    logging.error(f"Error checking session timeout: {e}")
+                    # Reset session on error
+                    session['last_activity'] = now
+                    return
+
+            # Update last activity time
+            session['last_activity'] = now
 
     # Authentication routes
     @app.route('/register', methods=['GET', 'POST'])
@@ -173,11 +207,11 @@ def create_app():
         if current_user.is_authenticated:
             flash('You are already logged in.', 'info')
             return redirect(url_for('index'))
-        
+
         # Check if redirected due to timeout
         if request.args.get('timeout') == '1':
             flash('⚠️ WARNING: You have been logged out due to inactivity! Your session expired after 30 minutes of no activity.', 'error')
-        
+
         form = LoginForm()
         if form.validate_on_submit():
             user = User.query.filter_by(username=form.username.data).first()
@@ -185,17 +219,17 @@ def create_app():
                 login_user(user, remember=form.remember.data)
                 user.last_login = get_utc_now()
                 db.session.commit()
-                
+
                 # Create JWT tokens (use default expiry from config)
                 access_token = create_access_token(identity=user.id)
                 refresh_token = create_refresh_token(identity=user.id)
-                
+
                 flash('Login successful!', 'success')
                 next_page = request.args.get('next')
                 return redirect(next_page) if next_page else redirect(url_for('index'))
             else:
                 flash('Invalid username or password.', 'error')
-        
+
         return render_template('login.html', form=form)
 
     @app.route('/logout')
@@ -208,9 +242,11 @@ def create_app():
     @app.route('/session-timeout')
     def session_timeout():
         """Dedicated page for session timeout warning"""
-        logout_user()
+        if current_user.is_authenticated:
+            logout_user()
         session.clear()
-        return render_template('session_timeout.html')
+        # Pass timeout=1 to show the timeout message on the login page
+        return redirect(url_for('login', timeout=1))
 
     @app.route('/refresh', methods=['POST'])
     @jwt_required(refresh=True)
@@ -249,26 +285,30 @@ def create_app():
         # Get recent transactions for dashboard
         recent_transactions = Transaction.query.filter_by(user_id=current_user.id)\
             .order_by(Transaction.date.desc()).limit(10).all()
-        
+
         # Calculate basic stats
-        all_transactions = Transaction.query.filter_by(user_id=current_user.id).all()
+        all_transactions = Transaction.query.filter_by(
+            user_id=current_user.id).all()
         total_income = sum(t.amount for t in all_transactions if t.amount > 0)
-        total_expenses = abs(sum(t.amount for t in all_transactions if t.amount < 0))
+        total_expenses = abs(
+            sum(t.amount for t in all_transactions if t.amount < 0))
         net_balance = total_income - total_expenses
-        
+
         # Get AI insights
         transaction_data = [t.to_dict() for t in all_transactions]
-        spending_analysis = finance_analyzer.analyze_spending_patterns(transaction_data)
-        budget_recommendations = finance_analyzer.generate_budget_recommendations(transaction_data, total_income)
-        
-        return render_template('dashboard.html', 
-                             user=current_user,
-                             recent_transactions=recent_transactions,
-                             total_income=total_income,
-                             total_expenses=total_expenses,
-                             net_balance=net_balance,
-                             spending_analysis=spending_analysis,
-                             budget_recommendations=budget_recommendations)
+        spending_analysis = finance_analyzer.analyze_spending_patterns(
+            transaction_data)
+        budget_recommendations = finance_analyzer.generate_budget_recommendations(
+            transaction_data, total_income)
+
+        return render_template('dashboard.html',
+                               user=current_user,
+                               recent_transactions=recent_transactions,
+                               total_income=total_income,
+                               total_expenses=total_expenses,
+                               net_balance=net_balance,
+                               spending_analysis=spending_analysis,
+                               budget_recommendations=budget_recommendations)
 
     @app.route('/analytics')
     @login_required
@@ -276,33 +316,36 @@ def create_app():
         # Get date filter parameters
         start_date = request.args.get('start_date')
         end_date = request.args.get('end_date')
-        
+
         # Build query for transactions
         query = Transaction.query.filter_by(user_id=current_user.id)
-        
+
         # Apply date filters if provided
         if start_date and end_date:
             try:
                 start = datetime.strptime(start_date, '%Y-%m-%d').date()
                 end = datetime.strptime(end_date, '%Y-%m-%d').date()
-                query = query.filter(Transaction.date >= start, Transaction.date <= end)
+                query = query.filter(Transaction.date >=
+                                     start, Transaction.date <= end)
             except ValueError:
                 flash('Invalid date format. Using all transactions.', 'warning')
 
         # Get transactions
         transactions = query.order_by(Transaction.date.desc()).all()
-        
+
         # Initialize prev_transactions to None
         prev_transactions = None
-        
+
         # Calculate current period stats
         total_income = sum(t.amount for t in transactions if t.amount > 0)
-        total_expenses = abs(sum(t.amount for t in transactions if t.amount < 0))
+        total_expenses = abs(
+            sum(t.amount for t in transactions if t.amount < 0))
         net_savings = total_income - total_expenses
-        
+
         # Calculate daily averages
         if transactions:
-            date_range = (max(t.date for t in transactions) - min(t.date for t in transactions)).days + 1
+            date_range = (max(t.date for t in transactions) -
+                          min(t.date for t in transactions)).days + 1
             avg_daily_spend = total_expenses / date_range if date_range > 0 else 0
         else:
             avg_daily_spend = 0
@@ -310,19 +353,24 @@ def create_app():
         # Get previous period transactions for comparison
         if start_date and end_date:
             try:
-                period_length = (datetime.strptime(end_date, '%Y-%m-%d').date() - 
-                               datetime.strptime(start_date, '%Y-%m-%d').date()).days
-                prev_end = datetime.strptime(start_date, '%Y-%m-%d').date() - timedelta(days=1)
+                period_length = (datetime.strptime(end_date, '%Y-%m-%d').date() -
+                                 datetime.strptime(start_date, '%Y-%m-%d').date()).days
+                prev_end = datetime.strptime(
+                    start_date, '%Y-%m-%d').date() - timedelta(days=1)
                 prev_start = prev_end - timedelta(days=period_length)
-                
+
                 prev_transactions = Transaction.query.filter_by(user_id=current_user.id)\
                     .filter(Transaction.date >= prev_start, Transaction.date <= prev_end).all()
-                
-                prev_income = sum(t.amount for t in prev_transactions if t.amount > 0)
-                prev_expenses = abs(sum(t.amount for t in prev_transactions if t.amount < 0))
-                
-                income_change = ((total_income - prev_income) / prev_income * 100) if prev_income > 0 else 0
-                expenses_change = ((total_expenses - prev_expenses) / prev_expenses * 100) if prev_expenses > 0 else 0
+
+                prev_income = sum(
+                    t.amount for t in prev_transactions if t.amount > 0)
+                prev_expenses = abs(
+                    sum(t.amount for t in prev_transactions if t.amount < 0))
+
+                income_change = ((total_income - prev_income) /
+                                 prev_income * 100) if prev_income > 0 else 0
+                expenses_change = ((total_expenses - prev_expenses) /
+                                   prev_expenses * 100) if prev_expenses > 0 else 0
             except:
                 income_change = 0
                 expenses_change = 0
@@ -331,7 +379,8 @@ def create_app():
             expenses_change = 0
 
         # Calculate savings rate
-        savings_rate = (net_savings / total_income * 100) if total_income > 0 else 0
+        savings_rate = (net_savings / total_income *
+                        100) if total_income > 0 else 0
 
         # Prepare statistics
         stats = {
@@ -355,7 +404,8 @@ def create_app():
             df['date'] = pd.to_datetime(df['date'], errors='coerce')
             df = df.groupby('date')['amount'].sum().reset_index()
             df = df.sort_values('date')
-            spending_trends['labels'] = df['date'].dt.strftime('%Y-%m-%d').tolist()
+            spending_trends['labels'] = df['date'].dt.strftime(
+                '%Y-%m-%d').tolist()
             spending_trends['data'] = df['amount'].tolist()
 
         # Prepare category distribution data
@@ -372,12 +422,12 @@ def create_app():
 
         # Prepare monthly comparison data
         monthly_comparison = {
-            'labels': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            'labels': ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             'current_year': [0] * 12,
             'previous_year': [0] * 12
         }
-        
+
         if transactions:
             current_year = max(t.date.year for t in transactions)
             df = pd.DataFrame([{
@@ -385,10 +435,12 @@ def create_app():
                 'month': t.date.month - 1,  # 0-based index for months
                 'amount': abs(t.amount) if t.amount < 0 else 0
             } for t in transactions if t.date.year in [current_year, current_year - 1]])
-            
-            current_year_data = df[df['year'] == current_year].groupby('month')['amount'].sum()
-            prev_year_data = df[df['year'] == current_year - 1].groupby('month')['amount'].sum()
-            
+
+            current_year_data = df[df['year'] == current_year].groupby('month')[
+                'amount'].sum()
+            prev_year_data = df[df['year'] == current_year -
+                                1].groupby('month')['amount'].sum()
+
             for month, amount in current_year_data.items():
                 monthly_comparison['current_year'][month] = amount
             for month, amount in prev_year_data.items():
@@ -403,29 +455,33 @@ def create_app():
                 'income': t.amount if t.amount > 0 else 0,
                 'expenses': abs(t.amount) if t.amount < 0 else 0
             } for t in transactions])
-            
+
             # Convert to datetime and handle invalid dates
             df['date'] = pd.to_datetime(df['date'], errors='coerce')
             df = df.dropna(subset=['date'])  # Remove invalid dates
-            
+
             # Ensure daily aggregation
             df = df.groupby(df['date'].dt.date).agg({
                 'income': 'sum',
                 'expenses': 'sum'
             }).reset_index()
-            
+
             # Sort by date and ensure continuous date range
             df = df.sort_values('date')
-            date_range = pd.date_range(start=df['date'].min(), end=df['date'].max(), freq='D')
-            df = df.set_index('date').reindex(date_range, fill_value=0).reset_index()
+            date_range = pd.date_range(
+                start=df['date'].min(), end=df['date'].max(), freq='D')
+            df = df.set_index('date').reindex(
+                date_range, fill_value=0).reset_index()
             df = df.rename(columns={'index': 'date'})
-            
+
             # Format dates for display
-            income_expenses['labels'] = df['date'].dt.strftime('%b %d').tolist()
+            income_expenses['labels'] = df['date'].dt.strftime(
+                '%b %d').tolist()
             income_expenses['income'] = df['income'].round(2).tolist()
             income_expenses['expenses'] = df['expenses'].round(2).tolist()
-            
-            income_expenses['labels'] = df['date'].dt.strftime('%Y-%m-%d').tolist()
+
+            income_expenses['labels'] = df['date'].dt.strftime(
+                '%Y-%m-%d').tolist()
             income_expenses['income'] = df['income'].tolist()
             income_expenses['expenses'] = df['expenses'].tolist()
 
@@ -435,7 +491,8 @@ def create_app():
         # Build a compact summary to send to the model (avoid sending huge raw lists)
         try:
             summary_lines = []
-            summary_lines.append(f"Total transactions: {len(transaction_data)}")
+            summary_lines.append(
+                f"Total transactions: {len(transaction_data)}")
             summary_lines.append(f"Total income: {total_income:.2f}")
             summary_lines.append(f"Total expenses: {total_expenses:.2f}")
 
@@ -443,18 +500,22 @@ def create_app():
             try:
                 tdf = pd.DataFrame(transaction_data)
                 if not tdf.empty and 'amount' in tdf.columns:
-                    tdf['amount'] = pd.to_numeric(tdf['amount'], errors='coerce')
+                    tdf['amount'] = pd.to_numeric(
+                        tdf['amount'], errors='coerce')
                     if 'category' in tdf.columns:
-                        cat_sum = tdf[tdf['amount'] < 0].groupby('category')['amount'].sum().abs().sort_values(ascending=False).head(8)
+                        cat_sum = tdf[tdf['amount'] < 0].groupby(
+                            'category')['amount'].sum().abs().sort_values(ascending=False).head(8)
                         summary_lines.append('Top expense categories:')
                         for cat, amt in cat_sum.items():
                             summary_lines.append(f"- {cat}: {amt:.2f}")
 
                     # largest transactions
-                    top_txns = tdf.assign(abs_amount=tdf['amount'].abs()).sort_values('abs_amount', ascending=False).head(5)
+                    top_txns = tdf.assign(abs_amount=tdf['amount'].abs()).sort_values(
+                        'abs_amount', ascending=False).head(5)
                     summary_lines.append('Largest transactions:')
                     for _, r in top_txns.iterrows():
-                        summary_lines.append(f"- {r.get('date', '')} | {r.get('merchant','')} | {float(r.get('amount',0)):.2f} | {r.get('category','')}")
+                        summary_lines.append(
+                            f"- {r.get('date', '')} | {r.get('merchant', '')} | {float(r.get('amount', 0)):.2f} | {r.get('category', '')}")
             except Exception:
                 # If summarization fails, continue with minimal summary
                 pass
@@ -499,8 +560,10 @@ def create_app():
 
             if not bedrock_response:
                 # Local fallback
-                patterns = finance_analyzer.analyze_spending_patterns(transaction_data)
-                recommendations = finance_analyzer.generate_budget_recommendations(transaction_data, total_income)
+                patterns = finance_analyzer.analyze_spending_patterns(
+                    transaction_data)
+                recommendations = finance_analyzer.generate_budget_recommendations(
+                    transaction_data, total_income)
                 opportunities = [
                     "Potential savings in dining category - Consider meal planning",
                     "Recurring subscriptions optimization opportunity",
@@ -513,8 +576,10 @@ def create_app():
             # If anything in the AI pipeline fails, fallback to safer defaults
             logging.error(f"AI insights generation failed: {e}", exc_info=True)
             transaction_data = [t.to_dict() for t in transactions]
-            patterns = finance_analyzer.analyze_spending_patterns(transaction_data)
-            recommendations = finance_analyzer.generate_budget_recommendations(transaction_data, total_income)
+            patterns = finance_analyzer.analyze_spending_patterns(
+                transaction_data)
+            recommendations = finance_analyzer.generate_budget_recommendations(
+                transaction_data, total_income)
             opportunities = [
                 "Potential savings in dining category - Consider meal planning",
                 "Recurring subscriptions optimization opportunity",
@@ -525,12 +590,16 @@ def create_app():
 
         # Calculate financial health score (simplified version)
         try:
-            savings_score = min(100, (savings_rate / 20) * 100)  # Aim for 20% savings rate
-            expense_stability_score = min(100, (100 - expenses_change) if expenses_change > 0 else 100)
-            income_growth_score = min(100, (income_change + 100) if income_change > -100 else 0)
-            
-            health_score = int((savings_score + expense_stability_score + income_growth_score) / 3)
-            
+            # Aim for 20% savings rate
+            savings_score = min(100, (savings_rate / 20) * 100)
+            expense_stability_score = min(
+                100, (100 - expenses_change) if expenses_change > 0 else 100)
+            income_growth_score = min(
+                100, (income_change + 100) if income_change > -100 else 0)
+
+            health_score = int(
+                (savings_score + expense_stability_score + income_growth_score) / 3)
+
             if health_score >= 80:
                 health_description = "Excellent financial health! Keep up the great work!"
             elif health_score >= 60:
@@ -545,9 +614,11 @@ def create_app():
 
         ai_insights = {
             'patterns': list(patterns.values())[:5] if isinstance(patterns, dict)
-                       else (patterns[:5] if isinstance(patterns, list) else []),  # Top 5 patterns
+            # Top 5 patterns
+            else (patterns[:5] if isinstance(patterns, list) else []),
             'recommendations': list(recommendations.values())[:5] if isinstance(recommendations, dict)
-                             else (recommendations[:5] if isinstance(recommendations, list) else []),  # Top 5 recommendations
+            # Top 5 recommendations
+            else (recommendations[:5] if isinstance(recommendations, list) else []),
             'opportunities': opportunities if 'opportunities' in locals() else [
                 "Potential savings in dining category - Consider meal planning",
                 "Recurring subscriptions optimization opportunity",
@@ -569,7 +640,7 @@ def create_app():
                 'Discretionary Spending': sum(abs(t.amount) for t in transactions if t.category in ['Entertainment', 'Dining', 'Shopping']),
                 'Essential Expenses': sum(abs(t.amount) for t in transactions if t.category in ['Utilities', 'Rent', 'Groceries'])
             }
-            
+
             # Calculate previous period metrics if available
             if prev_transactions:
                 prev_metrics = {
@@ -578,11 +649,12 @@ def create_app():
                     'Discretionary Spending': sum(abs(t.amount) for t in prev_transactions if t.category in ['Entertainment', 'Dining', 'Shopping']),
                     'Essential Expenses': sum(abs(t.amount) for t in prev_transactions if t.category in ['Utilities', 'Rent', 'Groceries'])
                 }
-                
+
                 # Calculate metrics with changes
                 for name, current in current_metrics.items():
                     previous = prev_metrics[name]
-                    change = ((current - previous) / previous * 100) if previous > 0 else 0
+                    change = ((current - previous) / previous *
+                              100) if previous > 0 else 0
                     detailed_metrics.append({
                         'name': name,
                         'current': current,
@@ -600,14 +672,14 @@ def create_app():
                     })
 
         return render_template('analytics.html',
-                            user=current_user,
-                            stats=stats,
-                            spending_trends=spending_trends,
-                            category_distribution=category_distribution,
-                            monthly_comparison=monthly_comparison,
-                            income_expenses=income_expenses,
-                            ai_insights=ai_insights,
-                            detailed_metrics=detailed_metrics)
+                               user=current_user,
+                               stats=stats,
+                               spending_trends=spending_trends,
+                               category_distribution=category_distribution,
+                               monthly_comparison=monthly_comparison,
+                               income_expenses=income_expenses,
+                               ai_insights=ai_insights,
+                               detailed_metrics=detailed_metrics)
 
     @app.route('/transactions')
     @login_required
@@ -624,7 +696,8 @@ def create_app():
                 # Save the file to a temporary location
                 temp_dir = os.path.join(app.instance_path, 'temp')
                 os.makedirs(temp_dir, exist_ok=True)
-                temp_filepath = os.path.join(temp_dir, form.csv_file.data.filename)
+                temp_filepath = os.path.join(
+                    temp_dir, form.csv_file.data.filename)
                 form.csv_file.data.save(temp_filepath)
 
                 # Read the CSV for preview
@@ -668,7 +741,8 @@ def create_app():
         form.date_column.choices = choices
         form.merchant_column.choices = choices
         form.amount_column.choices = choices
-        form.category_column.choices = [('', 'Select category column (optional)')] + choices
+        form.category_column.choices = [
+            ('', 'Select category column (optional)')] + choices
 
         if form.validate_on_submit():
             try:
@@ -678,10 +752,10 @@ def create_app():
                 amount_column = int(form.amount_column.data)
                 category_column = form.category_column.data
                 currency = form.currency.data
-                
+
                 # Read CSV file
                 df = pd.read_csv(temp_filepath)
-                
+
                 # Currency conversion rates (simplified - in production use real API)
                 currency_rates = {
                     'INR': 1.0,
@@ -689,9 +763,9 @@ def create_app():
                     'EUR': 90.0,
                     'GBP': 105.0
                 }
-                
+
                 conversion_rate = currency_rates.get(currency, 1.0)
-                
+
                 # Process each row
                 transactions_added = 0
                 proofs_logged = 0
@@ -701,39 +775,20 @@ def create_app():
                         # Parse date
                         date_str = str(row.iloc[date_column])
                         transaction_date = pd.to_datetime(date_str).date()
-                        
+
                         # Get merchant name
                         merchant = str(row.iloc[merchant_column])
-                        
+
                         # Get amount and convert to INR
                         amount = float(row.iloc[amount_column]) * conversion_rate
-                        
+
                         # Get category if specified
                         category = None
                         if category_column and category_column != '':
                             category = str(row.iloc[int(category_column)])
-                        
-                        # Compute integrity hash and optionally store
-                        txn_id = f"csv:{current_user.id}:{index}"
-                        payload_hash = blockchain.compute_transaction_hash(
-                            txn_id=txn_id,
-                            date_iso=transaction_date.isoformat(),
-                            amount=amount,
-                            merchant=merchant,
-                            category=category,
-                        )
-                        chain, chain_tx = blockchain.submit_to_chain(payload_hash)
-                        db.session.add(
-                            IntegrityProof(
-                                user_id=current_user.id,
-                                txn_hash=payload_hash,
-                                chain_tx_hash=chain_tx,
-                                chain=chain,
-                            )
-                        )
-                        proofs_logged += 1
 
                         # Respect privacy mode (do not persist raw data if enabled)
+                        transaction = None
                         if not app.config.get('PRIVACY_MODE', False):
                             transaction = Transaction(
                                 user_id=current_user.id,
@@ -744,8 +799,34 @@ def create_app():
                                 source='csv'
                             )
                             db.session.add(transaction)
+                            # Flush so we get transaction.id for linking logs
+                            db.session.flush()
                             transactions_added += 1
-                        
+
+                        # --- Automatic Blockchain Logging ---
+                        try:
+                            deploy_contract()
+                            txn_data_for_hash = {
+                                'merchant': merchant,
+                                'amount': amount,
+                                'category': category or 'Uncategorized'
+                            }
+                            txn_sha256_hash, chain_tx_hash = log_transaction_to_chain(txn_data_for_hash)
+                            if txn_sha256_hash and chain_tx_hash:
+                                integrity_proof = IntegrityProof(
+                                    user_id=current_user.id,
+                                    transaction_id=transaction.id if transaction else None, # Link if transaction was added
+                                    txn_hash=txn_sha256_hash,
+                                    chain_tx_hash=chain_tx_hash,
+                                    chain='ethereum'
+                                )
+                                db.session.add(integrity_proof)
+                                proofs_logged += 1
+                        except Exception as e:
+                            logging.error(f"Failed to log CSV transaction to blockchain: {e}")
+                            flash('Transaction saved, but failed to log to blockchain.', 'warning')
+                        # --- END Automatic Blockchain Logging ---
+
                         processed_txns.append({
                             'date': transaction_date.isoformat(),
                             'merchant': merchant,
@@ -753,17 +834,18 @@ def create_app():
                             'category': category,
                             'description': merchant,
                         })
-                        
+
                     except Exception as e:
                         logging.warning(f"Error processing row {index}: {e}")
+                        db.session.rollback() # Rollback current transaction if error
                         continue
-                
-                db.session.commit()
-                
+
+                db.session.commit() # Commit all transactions and integrity proofs
+
                 # Perform AI & fraud analysis
                 categorized_txns = ai_categorizer.batch_categorize(processed_txns)
                 fraud_results = fraud_detector.detect(categorized_txns)
-                
+
                 # Store fraud detection results
                 if fraud_results:
                     session['fraud_flags'] = fraud_results
@@ -771,17 +853,15 @@ def create_app():
                 else:
                     session['fraud_flags'] = []
                     warning_msg = ''
-                
-                if app.config.get('PRIVACY_MODE', False):
-                    flash(f'Successfully logged {proofs_logged} transaction proofs to blockchain.{warning_msg}', 'success')
-                else:
-                    flash(f'Successfully processed {transactions_added} transactions and logged {proofs_logged} proofs.{warning_msg}', 'success')
+
+                flash_msg = f'Successfully processed {transactions_added} transactions and logged {proofs_logged} proofs.{warning_msg}'
+                flash(flash_msg, 'success')
 
             except Exception as e:
                 db.session.rollback()
                 flash(f'Error processing CSV file: {e}', 'error')
                 logging.error(f"CSV processing error: {e}")
-            
+
             finally:
                 # Clean up the temporary file and session variable
                 if os.path.exists(temp_filepath):
@@ -799,11 +879,12 @@ def create_app():
     @app.route('/api/analytics/spending-patterns')
     @login_required
     def api_spending_patterns():
-        transactions = Transaction.query.filter_by(user_id=current_user.id).all()
+        transactions = Transaction.query.filter_by(
+            user_id=current_user.id).all()
         transaction_data = [t.to_dict() for t in transactions]
         # Try Bedrock first (return JSON {"patterns": [...]})
         try:
-            summary = f"Total transactions: {len(transaction_data)}\nTotal income: {sum(t['amount'] for t in transaction_data if t.get('amount')):.2f}\nTotal expenses: {abs(sum(t['amount'] for t in transaction_data if t.get('amount') and t['amount']<0)):.2f}"
+            summary = f"Total transactions: {len(transaction_data)}\nTotal income: {sum(t['amount'] for t in transaction_data if t.get('amount')):.2f}\nTotal expenses: {abs(sum(t['amount'] for t in transaction_data if t.get('amount') and t['amount'] < 0)):.2f}"
             prompt = (
                 "You are an expert personal finance analyst. Based on the transaction summary below, return a JSON object with a single key 'patterns' which is an array of up to 8 concise spending pattern observations. Return ONLY valid JSON.\n\n"
                 "Transaction summary:\n" + summary
@@ -822,16 +903,17 @@ def create_app():
         # Fallback
         analysis = finance_analyzer.analyze_spending_patterns(transaction_data)
         return jsonify({'patterns': analysis})
-    
+
     @app.route('/api/analytics/budget-recommendations')
     @login_required
     def api_budget_recommendations():
-        transactions = Transaction.query.filter_by(user_id=current_user.id).all()
+        transactions = Transaction.query.filter_by(
+            user_id=current_user.id).all()
         transaction_data = [t.to_dict() for t in transactions]
         total_income = sum(t.amount for t in transactions if t.amount > 0)
         # Try Bedrock first (return JSON {"recommendations": [...]})
         try:
-            summary = f"Total transactions: {len(transaction_data)}\nTotal income: {total_income:.2f}\nTotal expenses: {abs(sum(t['amount'] for t in transaction_data if t.get('amount') and t['amount']<0)):.2f}"
+            summary = f"Total transactions: {len(transaction_data)}\nTotal income: {total_income:.2f}\nTotal expenses: {abs(sum(t['amount'] for t in transaction_data if t.get('amount') and t['amount'] < 0)):.2f}"
             prompt = (
                 "You are an expert personal finance advisor. Based on the transaction summary below, return a JSON object with a single key 'recommendations' which is an array of up to 8 actionable budget recommendations, prioritized. Return ONLY valid JSON.\n\n"
                 "Transaction summary:\n" + summary
@@ -848,13 +930,15 @@ def create_app():
             pass
 
         # Fallback
-        recommendations = finance_analyzer.generate_budget_recommendations(transaction_data, total_income)
+        recommendations = finance_analyzer.generate_budget_recommendations(
+            transaction_data, total_income)
         return jsonify({'recommendations': recommendations})
-    
+
     @app.route('/api/fraud-detection')
     @login_required
     def api_fraud_detection():
-        transactions = Transaction.query.filter_by(user_id=current_user.id).all()
+        transactions = Transaction.query.filter_by(
+            user_id=current_user.id).all()
         transaction_data = [t.to_dict() for t in transactions]
         fraud_flags = finance_analyzer.detect_fraud(transaction_data)
         return jsonify({'fraud_flags': fraud_flags})
@@ -863,29 +947,30 @@ def create_app():
     @login_required
     def fraud_report():
         logging.info(f"Generating fraud report for user {current_user.id}")
-        
+
         # Get date filter parameters
         start_date = request.args.get('start_date')
         end_date = request.args.get('end_date')
-        
+
         # Build query for transactions - start with all user transactions
         query = Transaction.query.filter_by(user_id=current_user.id)
-        
+
         # Apply date filters only if both dates are provided
         if start_date and end_date:
             try:
                 start = datetime.strptime(start_date, '%Y-%m-%d').date()
                 end = datetime.strptime(end_date, '%Y-%m-%d').date()
-                query = query.filter(Transaction.date >= start, Transaction.date <= end)
+                query = query.filter(Transaction.date >=
+                                     start, Transaction.date <= end)
                 logging.info(f"Applying date filter: {start} to {end}")
             except ValueError as e:
                 flash('Invalid date format. Using all transactions.', 'warning')
                 logging.warning(f"Invalid date format: {e}")
-        
+
         # Order by date descending
         transactions = query.order_by(Transaction.date.desc()).all()
         logging.info(f"Found {len(transactions)} transactions")
-        
+
         # Convert transactions to dictionary format for fraud engine
         # Fraud engine expects: date (ISO string or datetime), merchant, amount, category, description
         transaction_data = []
@@ -893,7 +978,7 @@ def create_app():
             try:
                 # Ensure date is in ISO format string that pandas can parse
                 date_str = t.date.isoformat() if hasattr(t.date, 'isoformat') else str(t.date)
-                
+
                 # Create transaction dict with all required fields
                 tx_dict = {
                     'date': date_str,
@@ -907,30 +992,35 @@ def create_app():
                 }
                 transaction_data.append(tx_dict)
             except Exception as e:
-                logging.error(f"Error converting transaction {t.id} to dict: {e}")
+                logging.error(
+                    f"Error converting transaction {t.id} to dict: {e}")
                 continue
-        
+
         # Analyze all transactions using FraudEngine
         try:
             from fraud_engine import FraudEngine
             fraud_engine = FraudEngine(transaction_data)
             fraud_flags = fraud_engine.detect_fraud()
-            logging.info(f"Generated {len(fraud_flags)} fraud analysis entries")
-            
+            logging.info(
+                f"Generated {len(fraud_flags)} fraud analysis entries")
+
             # Ensure fraud_flags is a list (handle None case)
             if fraud_flags is None:
                 fraud_flags = []
-                logging.warning("Fraud detection returned None, using empty list")
+                logging.warning(
+                    "Fraud detection returned None, using empty list")
         except Exception as e:
             logging.error(f"Error in fraud detection: {e}", exc_info=True)
             fraud_flags = []
             flash(f'Error during fraud analysis: {e}', 'error')
-        
+
         # Ensure we have an entry for every transaction
         if len(fraud_flags) != len(transaction_data):
-            logging.warning(f"Mismatch: {len(transaction_data)} transactions but {len(fraud_flags)} fraud flags")
+            logging.warning(
+                f"Mismatch: {len(transaction_data)} transactions but {len(fraud_flags)} fraud flags")
             # Create default entries for missing transactions
-            transaction_ids_in_flags = {f.get('transaction', {}).get('id') for f in fraud_flags if f.get('transaction', {}).get('id')}
+            transaction_ids_in_flags = {f.get('transaction', {}).get(
+                'id') for f in fraud_flags if f.get('transaction', {}).get('id')}
             for tx in transaction_data:
                 if tx.get('id') not in transaction_ids_in_flags:
                     fraud_flags.append({
@@ -938,25 +1028,26 @@ def create_app():
                         'triggered_rules': [],
                         'risk_score': 0.0
                     })
-        
+
         # Calculate summary stats
         stats = {
             'total_transactions': len(transactions),
             'suspicious_transactions': len([f for f in fraud_flags if f['risk_score'] > 0]),
         }
-        
+
         if transactions:
             stats['date_range'] = {
                 'start': min(t.date for t in transactions).strftime('%Y-%m-%d'),
                 'end': max(t.date for t in transactions).strftime('%Y-%m-%d')
             }
-            
+
         # Calculate detailed statistics
         high_risk = [f for f in fraud_flags if f.get('risk_score', 0) >= 7]
-        medium_risk = [f for f in fraud_flags if 4 <= f.get('risk_score', 0) < 7]
+        medium_risk = [f for f in fraud_flags if 4 <=
+                       f.get('risk_score', 0) < 7]
         low_risk = [f for f in fraud_flags if 0 < f.get('risk_score', 0) < 4]
         no_risk = [f for f in fraud_flags if f.get('risk_score', 0) == 0]
-        
+
         stats = {
             'total_transactions': len(transactions),
             'suspicious_transactions': len([f for f in fraud_flags if f.get('risk_score', 0) > 0]),
@@ -969,21 +1060,21 @@ def create_app():
                 'end': max(t.date for t in transactions).strftime('%Y-%m-%d') if transactions else None
             } if transactions else None
         }
-        
+
         logging.info(f"Stats: {stats}")
-        
-        return render_template('fraud_report.html', 
-                             fraud_flags=fraud_flags,
-                             stats=stats,
-                             transactions=transactions)
-    
+
+        return render_template('fraud_report.html',
+                               fraud_flags=fraud_flags,
+                               stats=stats,
+                               transactions=transactions)
+
     @app.route('/api/ai/categorize', methods=['POST'])
     @login_required
     def api_categorize_transaction():
         data = request.get_json()
         description = data.get('description', '')
         amount = data.get('amount', 0)
-        
+
         result = finance_analyzer.categorize_transaction(description, amount)
         return jsonify(result)
 
@@ -994,14 +1085,16 @@ def create_app():
             # Simulate getting transactions from Plaid by reading the fraudulent_transactions.csv file
             df = pd.read_csv('fraudulent_transactions.csv')
             processed_txns = []
-            
+
             for index, row in df.iterrows():
                 try:
                     try:
-                        date = datetime.strptime(row['Date'], '%Y-%m-%dT%H:%M:%S').date()
+                        date = datetime.strptime(
+                            row['Date'], '%Y-%m-%dT%H:%M:%S').date()
                     except ValueError:
-                        date = datetime.strptime(row['Date'], '%Y-%m-%d').date()
-                    
+                        date = datetime.strptime(
+                            row['Date'], '%Y-%m-%d').date()
+
                     transaction = Transaction(
                         user_id=current_user.id,
                         date=date,
@@ -1013,35 +1106,66 @@ def create_app():
                         plaid_transaction_id=f"plaid_{row['Merchant'].replace(' ', '_').lower()}_{row['Date']}"
                     )
                     db.session.add(transaction)
-                    
+                    # flush to obtain transaction.id for linking
+                    db.session.flush()
+
                     processed_txns.append({
+                        'txn_id': transaction.id,
                         'date': date.isoformat(),
                         'merchant': row['Merchant'],
                         'amount': float(row['Amount']),
                         'category': row['Category'],
                         'description': row['Description']
                     })
-                    
+
+                    # --- Automatic Blockchain Logging ---
+                    try:
+                        deploy_contract()
+                        txn_data_for_hash = {
+                            'merchant': transaction.merchant,
+                            'amount': transaction.amount,
+                            'category': transaction.category or 'Uncategorized'
+                        }
+                        txn_sha256_hash, chain_tx_hash = log_transaction_to_chain(txn_data_for_hash)
+                        if txn_sha256_hash and chain_tx_hash:
+                            integrity_proof = IntegrityProof(
+                                user_id=current_user.id,
+                                transaction_id=transaction.id,
+                                txn_hash=txn_sha256_hash,
+                                chain_tx_hash=chain_tx_hash,
+                                chain='ethereum'
+                            )
+                            db.session.add(integrity_proof)
+                            flash('Transaction successfully logged to the blockchain.', 'info')
+                        else:
+                            flash('Transaction saved, but failed to log to blockchain.', 'warning')
+                    except Exception as e:
+                        logging.error(f"Failed to log Plaid transaction to blockchain: {e}")
+                        flash('Transaction saved, but failed to log to blockchain.', 'warning')
+                    # --- END Automatic Blockchain Logging ---
+
                 except Exception as e:
                     logging.error(f"Error processing transaction {index}: {e}")
                     continue
-            
-            db.session.commit()
-            
+
+            db.session.commit() # Commit all transactions and integrity proofs
+
             # Perform fraud detection
             fraud_flags = finance_analyzer.detect_fraud(processed_txns)
             if fraud_flags:
                 session['fraud_flags'] = fraud_flags
-                flash(f'Successfully imported transactions. WARNING: Found {len(fraud_flags)} suspicious transactions! Check the fraud report for details.', 'warning')
+                flash(
+                    f'Successfully imported transactions. WARNING: Found {len(fraud_flags)} suspicious transactions! Check the fraud report for details.', 'warning')
             else:
                 session['fraud_flags'] = []
-                flash('Successfully connected to bank and imported transactions!', 'success')
-            
+                flash(
+                    'Successfully connected to bank and imported transactions!', 'success')
+
         except Exception as e:
             db.session.rollback()
             flash(f'Error connecting to bank: {e}', 'error')
             logging.error(f"Plaid connection error: {e}")
-        
+
         return redirect(url_for('transactions'))
 
     # API endpoints for transactions
@@ -1051,26 +1175,29 @@ def create_app():
         source_filter = request.args.get('source', 'all')
         date_from = request.args.get('date_from')
         date_to = request.args.get('date_to')
-        
+
         # Build query
         query = Transaction.query.filter_by(user_id=current_user.id)
-        
+
         if source_filter != 'all':
             query = query.filter_by(source=source_filter)
-        
+
         if date_from:
-            query = query.filter(Transaction.date >= datetime.strptime(date_from, '%Y-%m-%d').date())
-        
+            query = query.filter(Transaction.date >= datetime.strptime(
+                date_from, '%Y-%m-%d').date())
+
         if date_to:
-            query = query.filter(Transaction.date <= datetime.strptime(date_to, '%Y-%m-%d').date())
-        
+            query = query.filter(Transaction.date <=
+                                 datetime.strptime(date_to, '%Y-%m-%d').date())
+
         transactions = query.order_by(Transaction.date.desc()).all()
-        
+
         # Calculate summary
         total_income = sum(t.amount for t in transactions if t.amount > 0)
-        total_expenses = abs(sum(t.amount for t in transactions if t.amount < 0))
+        total_expenses = abs(
+            sum(t.amount for t in transactions if t.amount < 0))
         net_balance = total_income - total_expenses
-        
+
         return jsonify({
             'transactions': [t.to_dict() for t in transactions],
             'summary': {
@@ -1084,13 +1211,13 @@ def create_app():
     @login_required
     def api_delete_transaction(transaction_id):
         transaction = Transaction.query.filter_by(
-            id=transaction_id, 
+            id=transaction_id,
             user_id=current_user.id
         ).first()
-        
+
         if not transaction:
             return jsonify({'success': False, 'message': 'Transaction not found'}), 404
-        
+
         try:
             db.session.delete(transaction)
             db.session.commit()
@@ -1114,7 +1241,8 @@ def create_app():
             query = Transaction.query.filter_by(user_id=current_user.id)
 
             if start_date_str:
-                start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+                start_date = datetime.strptime(
+                    start_date_str, '%Y-%m-%d').date()
                 query = query.filter(Transaction.date >= start_date)
 
             if end_date_str:
@@ -1129,13 +1257,17 @@ def create_app():
             db.session.commit()
 
             if start_date_str and end_date_str:
-                flash(f'Successfully deleted {count} transactions between {start_date_str} and {end_date_str}.', 'success')
+                flash(
+                    f'Successfully deleted {count} transactions between {start_date_str} and {end_date_str}.', 'success')
             elif start_date_str:
-                flash(f'Successfully deleted {count} transactions from {start_date_str} onwards.', 'success')
+                flash(
+                    f'Successfully deleted {count} transactions from {start_date_str} onwards.', 'success')
             elif end_date_str:
-                flash(f'Successfully deleted {count} transactions up to {end_date_str}.', 'success')
+                flash(
+                    f'Successfully deleted {count} transactions up to {end_date_str}.', 'success')
             else:
-                flash(f'Successfully deleted all {count} transactions.', 'success')
+                flash(
+                    f'Successfully deleted all {count} transactions.', 'success')
 
         except Exception as e:
             db.session.rollback()
@@ -1144,41 +1276,120 @@ def create_app():
 
         return redirect(url_for('transactions'))
 
-    @app.route('/log_to_blockchain', methods=['POST'])
+    @app.route('/upload_receipt', methods=['GET', 'POST'])
     @login_required
-    def log_to_blockchain():
-        try:
-            # Deploy contract if not already deployed
-            deploy_contract()
-            
-            # Fetch latest transactions from DB for the current user
-            transactions = Transaction.query.filter_by(user_id=current_user.id).all()
-            
-            logged_count = 0
-            for txn in transactions:
-                txn_data = {
-                    'merchant': txn.merchant,
-                    'amount': txn.amount,
-                    'category': txn.category or 'Uncategorized'
-                }
-                if log_transaction_to_chain(txn_data):
-                    logged_count += 1
-            
-            return jsonify({"logged": logged_count, "success": True})
-        except Exception as e:
-            logging.error(f"Error logging to blockchain: {e}", exc_info=True)
-            return jsonify({"success": False, "error": str(e)}), 500
+    def upload_receipt():
+        form = ReceiptUploadForm()
+        if form.validate_on_submit():
+            file = form.receipt_file.data
+            try:
+                # Process the receipt (uploads to S3, uses Textract, Bedrock)
+                transaction_data = process_receipt(file, current_user.id)
 
-    @app.route('/blockchain_logs', methods=['GET'])
+                if transaction_data:
+                    # Save the processed data to the main SQL database
+                    new_transaction = Transaction(
+                        user_id=current_user.id,
+                        date=transaction_data['date'],
+                        merchant=transaction_data['merchant'],
+                        amount=transaction_data['amount'],
+                        category=transaction_data['category'],
+                        description=transaction_data['description'],
+                        source=transaction_data['source']
+                    )
+                    db.session.add(new_transaction)
+                    db.session.flush() # Assigns an ID to new_transaction
+                    flash('Receipt processed and transaction created successfully!', 'success')
+
+                    # --- Automatic Blockchain Logging ---
+                    try:
+                        deploy_contract() # Ensure contract is deployed
+                        txn_data_for_hash = {
+                            'merchant': new_transaction.merchant,
+                            'amount': new_transaction.amount,
+                            'category': new_transaction.category or 'Uncategorized'
+                        }
+                        txn_sha256_hash, chain_tx_hash = log_transaction_to_chain(txn_data_for_hash)
+                        if txn_sha256_hash and chain_tx_hash:
+                            # Store the blockchain transaction hash in IntegrityProof
+                            integrity_proof = IntegrityProof(
+                                user_id=current_user.id,
+                                transaction_id=new_transaction.id, # NEW: Link to the transaction
+                                txn_hash=txn_sha256_hash,
+                                chain_tx_hash=chain_tx_hash,
+                                chain='ethereum' # Assuming Ethereum for Ganache
+                            )
+                            db.session.add(integrity_proof)
+                            flash('Transaction successfully logged to the blockchain.', 'info')
+                        else:
+                            flash('Transaction saved, but failed to log to blockchain.', 'warning')
+                    except Exception as e:
+                        logging.error(f"Failed to log receipt transaction to blockchain: {e}")
+                        flash('Transaction saved, but failed to log to blockchain.', 'warning')
+                    # ------------------------------------
+
+                    db.session.commit() # Commit both transaction and integrity_proof
+                    return redirect(url_for('transactions')) # Redirect to the main transactions list
+                else:
+                    flash(
+                        'Could not extract transaction data from the receipt. Please try another image.', 'error')
+                    return redirect(url_for('upload_receipt'))
+
+            except Exception as e:
+                logging.error(f"Error processing receipt: {e}", exc_info=True)
+                flash(
+                    f'An unexpected error occurred during receipt processing: {e}', 'error')
+                return redirect(url_for('upload_receipt'))
+
+        # For GET requests, just render the upload form
+        return render_template('upload_receipt.html', form=form)
+
+
+    def format_chain_hash(chain_tx_hash):
+        """Format a blockchain transaction hash from bytes to hex string"""
+        if not chain_tx_hash:
+            return None
+        try:
+            # If it's already a string, just clean it up
+            if isinstance(chain_tx_hash, str):
+                # Remove any b'' markers and \x escapes
+                clean_hash = chain_tx_hash.replace("b'", "").replace("'", "").replace("\\x", "")
+                return f"0x{clean_hash}"
+            
+            # If it's bytes, convert to hex
+            if isinstance(chain_tx_hash, bytes):
+                return f"0x{chain_tx_hash.hex()}"
+            
+            return str(chain_tx_hash)
+        except Exception as e:
+            logging.error(f"Error formatting chain hash: {e}")
+            return str(chain_tx_hash)
+
+    @app.route('/blockchain_logs')
     @login_required
     def blockchain_logs():
         try:
-            logs = get_logged_events()
-            return render_template('blockchain_explorer.html', logs=logs)
+            # Query IntegrityProof and join with Transaction to get all data efficiently
+            proofs = IntegrityProof.query.join(Transaction).filter(
+                IntegrityProof.user_id == current_user.id
+            ).order_by(IntegrityProof.created_at.desc()).all()
+
+            # Format the chain hashes before sending to template
+            formatted_proofs = []
+            for proof in proofs:
+                proof_dict = {
+                    'transaction': proof.transaction,
+                    'txn_hash': proof.txn_hash,
+                    'chain_tx_hash': format_chain_hash(proof.chain_tx_hash),
+                    'created_at': proof.created_at
+                }
+                formatted_proofs.append(proof_dict)
+
+            return render_template('blockchain_explorer.html', proofs=formatted_proofs)
         except Exception as e:
             logging.error(f"Error fetching blockchain logs: {e}", exc_info=True)
             flash(f"Could not fetch blockchain logs: {e}", "error")
-            return render_template('blockchain_explorer.html', logs=[])
+            return render_template('blockchain_explorer.html', proofs=[])
 
     logging.debug("create_app finished")
     return app

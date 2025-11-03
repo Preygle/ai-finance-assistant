@@ -6,23 +6,24 @@
 <div class="main-content">
     <div class="container">
         <div class="analytics-container">
-            <!-- Header Section -->
             <div class="analytics-header">
                 <h1><i class="fas fa-chart-line"></i> Financial Analytics Dashboard</h1>
                 <p>AI-powered insights and analysis of your financial transactions</p>
             </div>
 
-            <!-- Time Period Filter -->
+            <!-- Time Filter -->
             <div class="time-filter-section">
                 <form action="{{ url_for('analytics') }}" method="get" class="filter-form">
                     <div class="filter-inputs">
                         <div class="input-group">
                             <label for="start_date"><i class="fas fa-calendar-alt"></i> From:</label>
-                            <input type="date" id="start_date" name="start_date" value="{{ request.args.get('start_date', '') }}" class="form-input">
+                            <input type="date" id="start_date" name="start_date"
+                                value="{{ request.args.get('start_date', '') }}" class="form-input">
                         </div>
                         <div class="input-group">
                             <label for="end_date"><i class="fas fa-calendar-alt"></i> To:</label>
-                            <input type="date" id="end_date" name="end_date" value="{{ request.args.get('end_date', '') }}" class="form-input">
+                            <input type="date" id="end_date" name="end_date"
+                                value="{{ request.args.get('end_date', '') }}" class="form-input">
                         </div>
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-filter"></i> Apply Filter
@@ -35,31 +36,23 @@
             <div class="overview-section">
                 <div class="stats-grid">
                     <div class="stat-card total-income">
-                        <div class="stat-icon">
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
+                        <div class="stat-icon"><i class="fas fa-arrow-up"></i></div>
                         <div class="stat-content">
                             <h3>Total Income</h3>
                             <p class="stat-number">₹{{ "%.2f"|format(stats.total_income) }}</p>
-                            <small>{{ stats.income_change }}% vs previous period</small>
                         </div>
                     </div>
 
                     <div class="stat-card total-expenses">
-                        <div class="stat-icon">
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
+                        <div class="stat-icon"><i class="fas fa-arrow-down"></i></div>
                         <div class="stat-content">
                             <h3>Total Expenses</h3>
                             <p class="stat-number">₹{{ "%.2f"|format(stats.total_expenses) }}</p>
-                            <small>{{ stats.expenses_change }}% vs previous period</small>
                         </div>
                     </div>
 
                     <div class="stat-card net-savings">
-                        <div class="stat-icon">
-                            <i class="fas fa-piggy-bank"></i>
-                        </div>
+                        <div class="stat-icon"><i class="fas fa-piggy-bank"></i></div>
                         <div class="stat-content">
                             <h3>Net Savings</h3>
                             <p class="stat-number">₹{{ "%.2f"|format(stats.net_savings) }}</p>
@@ -68,9 +61,7 @@
                     </div>
 
                     <div class="stat-card average-daily">
-                        <div class="stat-icon">
-                            <i class="fas fa-calculator"></i>
-                        </div>
+                        <div class="stat-icon"><i class="fas fa-calculator"></i></div>
                         <div class="stat-content">
                             <h3>Avg. Daily Spend</h3>
                             <p class="stat-number">₹{{ "%.2f"|format(stats.avg_daily_spend) }}</p>
@@ -80,58 +71,83 @@
                 </div>
             </div>
 
-            <!-- Main Analytics Grid -->
+            <!-- Analytics Charts -->
             <div class="analytics-grid">
-                <!-- Spending Trends Chart -->
                 <div class="chart-card">
                     <h3><i class="fas fa-chart-line"></i> Spending Trends</h3>
                     <canvas id="spendingTrendsChart"></canvas>
                 </div>
 
-                <!-- Category Distribution -->
                 <div class="chart-card">
                     <h3><i class="fas fa-chart-pie"></i> Expense Categories</h3>
                     <canvas id="categoryDistributionChart"></canvas>
                 </div>
 
-                <!-- Monthly Comparison -->
                 <div class="chart-card">
                     <h3><i class="fas fa-chart-bar"></i> Monthly Comparison</h3>
                     <canvas id="monthlyComparisonChart"></canvas>
                 </div>
 
-                <!-- Income vs Expenses -->
                 <div class="chart-card">
                     <h3><i class="fas fa-balance-scale"></i> Income vs Expenses</h3>
                     <canvas id="incomeExpensesChart"></canvas>
                 </div>
             </div>
 
-            <!-- AI Insights Section -->
+            <!-- AI Insights -->
             <div class="insights-section">
                 <h2><i class="fas fa-robot"></i> AI-Powered Insights</h2>
                 <div class="insights-grid">
+
                     <!-- Spending Patterns -->
                     <div class="insight-card">
-                        <h4><i class="fas fa-lightbulb"></i> Spending Patterns</h4>
+                        <h4><i class="fas fa-lightbulb"></i> Spending Analysis</h4>
                         <div class="pattern-list">
-                            {% for pattern in ai_insights.patterns %}
                             <div class="pattern-item">
-                                <i class="fas fa-check-circle"></i>
-                                <p>{{ pattern|replace("[", "")|replace("]", "")|replace("'", "") }}</p>
+                                <i class="fas fa-chart-line"></i>
+                                <div class="pattern-content">
+                                    <p class="pattern-title">Top Category</p>
+                                    {% set top_category = ai_insights.get("top_category", {}) %}
+                                    {{ top_category.get("name", "N/A") }}:
+                                    ₹{{ "%.2f"|format(top_category.get("amount", 0)) }}
+                                </div>
                             </div>
-                            {% endfor %}
+                            <div class="pattern-item">
+                                <i class="fas fa-exchange-alt"></i>
+                                <div class="pattern-content">
+                                    <p class="pattern-title">Monthly Change</p>
+                                    {% set monthly_change = ai_insights.get("monthly_change", 0) %}
+                                    <p
+                                        class="pattern-value {% if monthly_change > 0 %}positive{% else %}negative{% endif %}">
+                                        {{ "+" if monthly_change > 0 else "" }}₹{{ "%.2f"|format(monthly_change) }}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="pattern-item">
+                                <i class="fas fa-calculator"></i>
+                                <div class="pattern-content">
+                                    <p class="pattern-title">Average Transaction</p>
+                                    {% set avg_tx = ai_insights.get("avg_transaction", 0) %}
+                                    <p class="pattern-value">₹{{ "%.2f"|format(avg_tx) }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Budget Recommendations -->
+                    <!-- Budget Alerts -->
                     <div class="insight-card">
-                        <h4><i class="fas fa-bullseye"></i> Budget Recommendations</h4>
+                        <h4><i class="fas fa-bullseye"></i> Budget Alerts</h4>
                         <div class="recommendations-list">
-                            {% for rec in ai_insights.recommendations %}
+                            {% for category, data in ai_insights.get("budget_alerts", {}).items() %}
                             <div class="recommendation-item">
-                                <i class="fas fa-arrow-right"></i>
-                                <p>{{ rec|replace("[", "")|replace("]", "")|replace("'", "")|replace("{", "")|replace("}", "") }}</p>
+                                <i class="fas fa-exclamation-circle"></i>
+                                <div class="recommendation-content">
+                                    <p class="category-name">{{ category }}</p>
+                                    <p class="spending-details">
+                                        Current: ₹{{ "%.2f"|format(data.current) }}<br>
+                                        Recommended: ₹{{ "%.2f"|format(data.recommended) }}
+                                    </p>
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
@@ -139,32 +155,26 @@
 
                     <!-- Savings Opportunities -->
                     <div class="insight-card">
-                        <h4><i class="fas fa-gift"></i> Savings Opportunities</h4>
+                        <h4><i class="fas fa-gift"></i> Savings Tips</h4>
                         <div class="opportunities-list">
-                            {% for opp in ai_insights.opportunities %}
+                            {% for opportunity in ai_insights.get("savings_opportunities", []) %}
                             <div class="opportunity-item">
                                 <i class="fas fa-star"></i>
-                                <p>{{ opp|replace("[", "")|replace("]", "")|replace("'", "") }}</p>
+                                <div class="opportunity-content">
+                                    <p>{{ opportunity.tip }}</p>
+                                    {% if opportunity.potential_savings %}
+                                    <p class="potential-savings">Potential Savings:
+                                        ₹{{ "%.2f"|format(opportunity.potential_savings) }}</p>
+                                    {% endif %}
+                                </div>
                             </div>
                             {% endfor %}
-                        </div>
-                    </div>
-
-                    <!-- Financial Health Score -->
-                    <div class="insight-card health-score">
-                        <h4><i class="fas fa-heartbeat"></i> Financial Health Score</h4>
-                        <div class="health-score-display">
-                            <div class="score-circle">
-                                <span class="score-number">{{ ai_insights.health_score }}</span>
-                                <span class="score-max">/100</span>
-                            </div>
-                            <p class="score-description">{{ ai_insights.health_description }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Detailed Metrics Table -->
+            <!-- Detailed Metrics -->
             <div class="metrics-section">
                 <h2><i class="fas fa-table"></i> Detailed Metrics</h2>
                 <div class="table-wrapper">
@@ -172,9 +182,7 @@
                         <thead>
                             <tr>
                                 <th>Metric</th>
-                                <th>Current Period</th>
-                                <th>Previous Period</th>
-                                <th>Change</th>
+                                <th>Current Value</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -182,10 +190,6 @@
                             <tr>
                                 <td>{{ metric.name }}</td>
                                 <td>₹{{ "%.2f"|format(metric.current) }}</td>
-                                <td>₹{{ "%.2f"|format(metric.previous) }}</td>
-                                <td class="{{ 'positive' if metric.change >= 0 else 'negative' }}">
-                                    {{ "+" if metric.change >= 0 else "" }}{{ "%.1f"|format(metric.change) }}%
-                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -197,239 +201,292 @@
 </div>
 
 <style>
-.analytics-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-}
+    .analytics-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
 
-.analytics-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
+    .analytics-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
 
-.analytics-header h1 {
-    color: #2c3e50;
-    margin-bottom: 10px;
-}
+    .analytics-header h1 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
 
-.time-filter-section {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-}
+    .time-filter-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+    }
 
-.filter-inputs {
-    display: flex;
-    gap: 15px;
-    align-items: flex-end;
-    flex-wrap: wrap;
-}
+    .filter-inputs {
+        display: flex;
+        gap: 15px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
 
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
 
-.stat-card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
 
-.stat-card.total-income { border-left: 4px solid #27ae60; }
-.stat-card.total-expenses { border-left: 4px solid #e74c3c; }
-.stat-card.net-savings { border-left: 4px solid #3498db; }
-.stat-card.average-daily { border-left: 4px solid #f39c12; }
+    .stat-card.total-income {
+        border-left: 4px solid #27ae60;
+    }
 
-.analytics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
+    .stat-card.total-expenses {
+        border-left: 4px solid #e74c3c;
+    }
 
-.chart-card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+    .stat-card.net-savings {
+        border-left: 4px solid #3498db;
+    }
 
-/* Ensure canvases have room to render when maintainAspectRatio is false */
-.chart-card canvas {
-    width: 100% !important;
-    height: 320px !important; /* visible default height */
-}
+    .stat-card.average-daily {
+        border-left: 4px solid #f39c12;
+    }
 
-.chart-card h3 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.insights-section {
-    margin-bottom: 30px;
-}
-
-.insights-section h2 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-}
-
-.insights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.insight-card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.insight-card h4 {
-    color: #2c3e50;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.pattern-item, .recommendation-item, .opportunity-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.pattern-item i, .recommendation-item i, .opportunity-item i {
-    color: #3498db;
-    font-size: 1.1em;
-    margin-top: 3px;
-}
-
-.pattern-item p, .recommendation-item p, .opportunity-item p {
-    margin: 0;
-    line-height: 1.5;
-    color: #2c3e50;
-}
-
-.pattern-item:last-child,
-.recommendation-item:last-child,
-.opportunity-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
-}
-
-.health-score-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.score-circle {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #f8f9fa;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-}
-
-.score-number {
-    font-size: 2.5em;
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-.score-max {
-    font-size: 1.2em;
-    color: #7f8c8d;
-}
-
-.metrics-section {
-    margin-bottom: 30px;
-}
-
-.metrics-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.metrics-table th {
-    background: #34495e;
-    color: white;
-    padding: 15px;
-    text-align: left;
-}
-
-.metrics-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.metrics-table tr:hover {
-    background: #f8f9fa;
-}
-
-.positive { color: #27ae60; }
-.negative { color: #e74c3c; }
-
-@media (max-width: 768px) {
     .analytics-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
     }
-    
+
+    .chart-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Ensure canvases have room to render when maintainAspectRatio is false */
+    .chart-card canvas {
+        width: 100% !important;
+        height: 320px !important;
+        /* visible default height */
+    }
+
+    .chart-card h3 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .insights-section {
+        margin-bottom: 30px;
+    }
+
+    .insights-section h2 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
     .insights-grid {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
     }
-}
+
+    .insight-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .insight-card h4 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .pattern-item,
+    .recommendation-item,
+    .opportunity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .pattern-item i,
+    .recommendation-item i,
+    .opportunity-item i {
+        color: #3498db;
+        font-size: 1.1em;
+        margin-top: 3px;
+    }
+
+    .pattern-content,
+    .recommendation-content,
+    .opportunity-content {
+        flex: 1;
+    }
+
+    .pattern-title {
+        color: #7f8c8d;
+        font-size: 0.9em;
+        margin-bottom: 4px;
+    }
+
+    .pattern-value {
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .category-name {
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .spending-details {
+        color: #7f8c8d;
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+
+    .potential-savings {
+        color: #27ae60;
+        font-size: 0.9em;
+        margin-top: 4px;
+    }
+
+    .opportunity-content p {
+        margin-bottom: 4px;
+    }
+
+    .pattern-item:last-child,
+    .recommendation-item:last-child,
+    .opportunity-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+
+    .health-score-display {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .score-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+
+    .score-number {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #2c3e50;
+    }
+
+    .score-max {
+        font-size: 1.2em;
+        color: #7f8c8d;
+    }
+
+    .metrics-section {
+        margin-bottom: 30px;
+    }
+
+    .metrics-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .metrics-table th {
+        background: #34495e;
+        color: white;
+        padding: 15px;
+        text-align: left;
+    }
+
+    .metrics-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .metrics-table tr:hover {
+        background: #f8f9fa;
+    }
+
+    .positive {
+        color: #27ae60;
+    }
+
+    .negative {
+        color: #e74c3c;
+    }
+
+    @media (max-width: 768px) {
+        .analytics-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .insights-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// Spending Trends Chart
-const spendingTrendsCtx = document.getElementById('spendingTrendsChart').getContext('2d');
-new Chart(spendingTrendsCtx, {
-    type: 'line',
-    data: {
-        labels: {{ spending_trends.labels | tojson }},
+    // Spending Trends Chart
+    const spendingTrendsCtx = document.getElementById('spendingTrendsChart').getContext('2d');
+    new Chart(spendingTrendsCtx, {
+        type: 'line',
+        data: {
+            labels: {{ spending_trends.labels | tojson }},
         datasets: [{
             label: 'Daily Spending',
             data: {{ spending_trends.data | tojson }},
-            borderColor: '#3498db',
-            tension: 0.4,
-            fill: false,
-            pointRadius: 3
+        borderColor: '#3498db',
+        tension: 0.4,
+        fill: false,
+        pointRadius: 3
         }]
     },
-    options: {
+        options: {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
             y: {
                 beginAtZero: true,
                 ticks: {
-                    callback: function(value) {
+                    callback: function (value) {
                         return '₹' + value.toLocaleString('en-IN');
                     }
                 }
@@ -446,7 +503,7 @@ new Chart(spendingTrendsCtx, {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         return '₹' + context.parsed.y.toLocaleString('en-IN');
                     }
                 }
@@ -455,21 +512,21 @@ new Chart(spendingTrendsCtx, {
     }
 });
 
-// Category Distribution Chart
-const categoryDistributionCtx = document.getElementById('categoryDistributionChart').getContext('2d');
-new Chart(categoryDistributionCtx, {
-    type: 'doughnut',
-    data: {
-        labels: {{ category_distribution.labels | tojson }},
+    // Category Distribution Chart
+    const categoryDistributionCtx = document.getElementById('categoryDistributionChart').getContext('2d');
+    new Chart(categoryDistributionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ category_distribution.labels | tojson }},
         datasets: [{
             data: {{ category_distribution.data | tojson }},
-            backgroundColor: [
-                '#27ae60', '#2ecc71', '#3498db', '#e74c3c', 
-                '#f39c12', '#9b59b6', '#1abc9c', '#34495e'
-            ]
+        backgroundColor: [
+            '#27ae60', '#2ecc71', '#3498db', '#e74c3c',
+            '#f39c12', '#9b59b6', '#1abc9c', '#34495e'
+        ]
         }]
     },
-    options: {
+        options: {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
@@ -481,7 +538,7 @@ new Chart(categoryDistributionCtx, {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         const total = context.dataset.data.reduce((a, b) => a + b, 0);
                         const value = context.parsed;
                         const percentage = ((value / total) * 100).toFixed(1);
@@ -493,30 +550,30 @@ new Chart(categoryDistributionCtx, {
     }
 });
 
-// Monthly Comparison Chart
-const monthlyComparisonCtx = document.getElementById('monthlyComparisonChart').getContext('2d');
-new Chart(monthlyComparisonCtx, {
-    type: 'bar',
-    data: {
-        labels: {{ monthly_comparison.labels | tojson }},
+    // Monthly Comparison Chart
+    const monthlyComparisonCtx = document.getElementById('monthlyComparisonChart').getContext('2d');
+    new Chart(monthlyComparisonCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ monthly_comparison.labels | tojson }},
         datasets: [{
             label: 'This Year',
             data: {{ monthly_comparison.current_year | tojson }},
-            backgroundColor: '#3498db'
+        backgroundColor: '#3498db'
         }, {
             label: 'Last Year',
             data: {{ monthly_comparison.previous_year | tojson }},
-            backgroundColor: '#95a5a6'
+        backgroundColor: '#95a5a6'
         }]
     },
-    options: {
+        options: {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
             y: {
                 beginAtZero: true,
                 ticks: {
-                    callback: function(value) {
+                    callback: function (value) {
                         return '₹' + value.toLocaleString('en-IN');
                     }
                 }
@@ -533,7 +590,7 @@ new Chart(monthlyComparisonCtx, {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         return context.dataset.label + ': ₹' + context.parsed.y.toLocaleString('en-IN');
                     }
                 }
@@ -542,33 +599,33 @@ new Chart(monthlyComparisonCtx, {
     }
 });
 
-// Income vs Expenses Chart
-const incomeExpensesCtx = document.getElementById('incomeExpensesChart').getContext('2d');
-new Chart(incomeExpensesCtx, {
-    type: 'line',
-    data: {
-        labels: {{ income_expenses.labels | tojson }},
+    // Income vs Expenses Chart
+    const incomeExpensesCtx = document.getElementById('incomeExpensesChart').getContext('2d');
+    new Chart(incomeExpensesCtx, {
+        type: 'line',
+        data: {
+            labels: {{ income_expenses.labels | tojson }},
         datasets: [{
             label: 'Income',
             data: {{ income_expenses.income | tojson }},
-            borderColor: '#27ae60',
-            backgroundColor: 'rgba(39, 174, 96, 0.1)',
-            tension: 0.4,
-            fill: true,
-            pointRadius: 3,
-            pointHoverRadius: 5
+        borderColor: '#27ae60',
+        backgroundColor: 'rgba(39, 174, 96, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 3,
+        pointHoverRadius: 5
         }, {
             label: 'Expenses',
             data: {{ income_expenses.expenses | tojson }},
-            borderColor: '#e74c3c',
-            backgroundColor: 'rgba(231, 76, 60, 0.1)',
-            tension: 0.4,
-            fill: true,
-            pointRadius: 3,
-            pointHoverRadius: 5
+        borderColor: '#e74c3c',
+        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 3,
+        pointHoverRadius: 5
         }]
     },
-    options: {
+        options: {
         responsive: true,
         maintainAspectRatio: false,
         aspectRatio: 2,  // Control the height/width ratio
@@ -589,7 +646,7 @@ new Chart(incomeExpensesCtx, {
                 },
                 ticks: {
                     maxTicksLimit: 8,  // Limit number of ticks for better readability
-                    callback: function(value) {
+                    callback: function (value) {
                         return '₹' + value.toLocaleString('en-IN');
                     }
                 }
@@ -617,7 +674,7 @@ new Chart(incomeExpensesCtx, {
                 mode: 'index',
                 intersect: false,
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         return context.dataset.label + ': ₹' + context.parsed.y.toLocaleString('en-IN');
                     }
                 }

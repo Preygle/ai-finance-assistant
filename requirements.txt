@@ -17,3 +17,4 @@ boto3
 web3
 py-solc-x
 eth-account
+Pillow

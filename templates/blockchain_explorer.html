@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Blockchain Logs{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">Blockchain Transaction Logs</h1>
+    <p class="page-subtitle">This page displays immutable transaction logs recorded on the local blockchain.</p>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Merchant</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Transaction Hash (SHA256)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if logs %}
+                    {% for log in logs %}
+                        <tr>
+                            <td>{{ log.timestamp }}</td>
+                            <td>{{ log.merchant }}</td>
+                            <td>{{ log.amount }}</td>
+                            <td>{{ log.category }}</td>
+                            <td class="hash-cell">{{ log.hash }}</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No logs found on the blockchain.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

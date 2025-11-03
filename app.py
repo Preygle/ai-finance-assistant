@@ -15,6 +15,7 @@ from ai_service import AICategorizer, FraudDetector
 from finance_analyzer import FinanceAnalyzerAI
 # Bedrock integration helper (generates AI-powered insights when configured)
 from bedrock_integration import generate_insights_bedrock
+from blockchain_logger import deploy_contract, log_transaction_to_chain, get_logged_events
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -1142,6 +1143,42 @@ def create_app():
             logging.error(f"Transaction deletion error: {e}")
 
         return redirect(url_for('transactions'))
+
+    @app.route('/log_to_blockchain', methods=['POST'])
+    @login_required
+    def log_to_blockchain():
+        try:
+            # Deploy contract if not already deployed
+            deploy_contract()
+            
+            # Fetch latest transactions from DB for the current user
+            transactions = Transaction.query.filter_by(user_id=current_user.id).all()
+            
+            logged_count = 0
+            for txn in transactions:
+                txn_data = {
+                    'merchant': txn.merchant,
+                    'amount': txn.amount,
+                    'category': txn.category or 'Uncategorized'
+                }
+                if log_transaction_to_chain(txn_data):
+                    logged_count += 1
+            
+            return jsonify({"logged": logged_count, "success": True})
+        except Exception as e:
+            logging.error(f"Error logging to blockchain: {e}", exc_info=True)
+            return jsonify({"success": False, "error": str(e)}), 500
+
+    @app.route('/blockchain_logs', methods=['GET'])
+    @login_required
+    def blockchain_logs():
+        try:
+            logs = get_logged_events()
+            return render_template('blockchain_explorer.html', logs=logs)
+        except Exception as e:
+            logging.error(f"Error fetching blockchain logs: {e}", exc_info=True)
+            flash(f"Could not fetch blockchain logs: {e}", "error")
+            return render_template('blockchain_explorer.html', logs=[])
 
     logging.debug("create_app finished")
     return app

@@ -1,6 +1,12 @@
 csrf_token() is wrong format, always go for csrf_token
 
 Make sure before applying any changes, there are no inconsistencies in styling
+
+
+Use proprt regex formats!!
+WRONG: match = re.search(r'name="csrf_token" type="hidden" value="([^"]+)"|'csrf_token'\s*:\s*'([^']+)'', res.text)
+RIGHT!!!!: match = re.search(r'name="csrf_token" type="hidden" value="([^"]+)"|\'csrf_token\'\s*:\s*\'([^\']+)\'', res.text)
+
 1. Authentication & Session (FR1)
 
 User Access:

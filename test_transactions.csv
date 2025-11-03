@@ -1,0 +1,10 @@
+Date,Merchant,Amount,Category
+2025-11-01,Local Grocery Store,1200,Groceries
+2025-11-01,ATM Withdrawal,25000,ATM
+2025-11-02,Online Shopping,7500,Shopping
+2025-11-02,Restaurant,1500,Dining
+2025-11-02,Gas Station,3000,Transportation
+2025-11-02,Quick Transfer,-50000,Transfer
+2025-11-02,Fast Pay Service,45000,Transfer
+2025-11-03,Big Electronics,75000,Shopping
+2025-11-03,Unknown Merchant,999,Other

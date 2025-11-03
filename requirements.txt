@@ -1,0 +1,16 @@
+Flask
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-WTF
+Flask-JWT-Extended
+Flask-Login
+bcrypt
+pandas
+scikit-learn
+web3
+python-dotenv
+PyMySQL
+email_validator
+plaid-python
+requests
+boto3

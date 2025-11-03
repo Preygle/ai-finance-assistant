@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - AI-Powered Finance Assistant{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-sign-in-alt"></i>
+            <h1>Login</h1>
+            <p>Welcome back! Please sign in to your account.</p>
+        </div>
+
+        <form method="POST" class="auth-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.username.label(class="form-label") }}
+                {{ form.username(class="form-input", placeholder="Enter your username") }}
+                {% if form.username.errors %}
+                    <div class="error-messages">
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label(class="form-label") }}
+                {{ form.password(class="form-input", placeholder="Enter your password") }}
+                {% if form.password.errors %}
+                    <div class="error-messages">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group form-checkbox">
+                {{ form.remember(class="form-checkbox-input") }}
+                {{ form.remember.label(class="form-checkbox-label") }}
+            </div>
+
+            {{ form.submit(class="btn btn-primary btn-full") }}
+        </form>
+
+        <div class="auth-footer">
+            <p>Don't have an account? 
+                <a href="{{ url_for('register') }}" class="auth-link">Register here</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

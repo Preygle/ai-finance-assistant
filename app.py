@@ -671,6 +671,13 @@ def create_app():
                         'change': 0
                     })
 
+        # Get AI insights
+        transaction_data = [t.to_dict() for t in transactions]
+        spending_analysis = finance_analyzer.analyze_spending_patterns(
+            transaction_data)
+        budget_recommendations = finance_analyzer.generate_budget_recommendations(
+            transaction_data, total_income)
+
         return render_template('analytics.html',
                                user=current_user,
                                stats=stats,
@@ -679,7 +686,9 @@ def create_app():
                                monthly_comparison=monthly_comparison,
                                income_expenses=income_expenses,
                                ai_insights=ai_insights,
-                               detailed_metrics=detailed_metrics)
+                               detailed_metrics=detailed_metrics,
+                               spending_analysis=spending_analysis,
+                               budget_recommendations=budget_recommendations)
 
     @app.route('/transactions')
     @login_required

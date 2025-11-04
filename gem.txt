@@ -1,5 +1,5 @@
-jinja2.exceptions.UndefinedError
-jinja2.exceptions.UndefinedError: 'dict object' has no attribute 'top_category'
+jinja2.exceptions.TemplateAssertionError
+jinja2.exceptions.TemplateAssertionError: block 'title' defined twice
 
 Traceback (most recent call last)
 File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\flask\app.py", line 1536, in __call__
@@ -12,8 +12,18 @@ File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib
 response = self.full_dispatch_request()
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
-rv = self.handle_user_exception(e)
-     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            request_started.send(self, _async_wrapper=self.ensure_sync)
+            rv = self.preprocess_request()
+            if rv is None:
+                rv = self.dispatch_request()
+        except Exception as e:
+            rv = self.handle_user_exception(e)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        return self.finalize_request(rv)
+ 
+    def finalize_request(
+        self,
+        rv: ft.ResponseReturnValue | HTTPException,
 File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
 rv = self.dispatch_request()
      ^^^^^^^^^^^^^^^^^^^^^^^
@@ -23,31 +33,33 @@ return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type
 File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\flask_login\utils.py", line 290, in decorated_view
 return current_app.ensure_sync(func)(*args, **kwargs)
        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\app.py", line 674, in analytics
-return render_template('analytics.html',
-       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\flask\templating.py", line 150, in render_template
-return _render(app, template, context)
-       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\flask\templating.py", line 131, in _render
-rv = template.render(context)
-     ^^^^^^^^^^^^^^^^^^^^^^^^
-File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\jinja2\environment.py", line 1295, in render
-self.environment.handle_exception()
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\app.py", line 1075, in fraud_report
+return render_template('fraud_report.html',
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\flask\templating.py", line 149, in render_template
+template = app.jinja_env.get_or_select_template(template_name_or_list)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+return self.get_template(template_name_or_list, parent, globals)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+return self._load_template(name, globals)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+template = self.loader.load(self, name, self.make_globals(globals))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\jinja2\loaders.py", line 138, in load
+code = environment.compile(source, name, filename)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\jinja2\environment.py", line 771, in compile
+self.handle_exception(source=source_hint)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
 raise rewrite_traceback_stack(source=source)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\templates\analytics.html", line 1, in top-level template code
-{% extends 'base.html' %}
-File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\templates\base.html", line 56, in top-level template code
-{% block content %}{% endblock %}
-File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\templates\analytics.html", line 120, in block 'content'
-<p class="pattern-value">{{ ai_insights.top_category.name }}: ₹{{ "%.2f"|format(ai_insights.top_category.amount) }}</p>
-File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\venv\Lib\site-packages\jinja2\environment.py", line 490, in getattr
-return getattr(obj, attribute)
-       ^^^^^^^^^^^^^^^^^^^^^^^
-jinja2.exceptions.UndefinedError: 'dict object' has no attribute 'top_category'
+File "C:\Users\moham\Documents\PROGRAMMING\AI-Powered Finance Assistant\templates\fraud_report.html", line 244, in template
+{% block title %}Fraud Detection Report - AI-Powered Finance Assistant{% endblock %}
+jinja2.exceptions.TemplateAssertionError: block 'title' defined twice
 The debugger caught an exception in your WSGI application. You can now look at the traceback which led to the error.
 To switch between the interactive traceback and the plaintext one, you can click on the "Traceback" headline. From the text traceback you can also create a paste of it. For code execution mouse-over the frame you want to debug and click on the console icon on the right side.
 
@@ -55,3 +67,4 @@ You can execute arbitrary Python code in the stack frames and there are some ext
 
 dump() shows all variables in the frame
 dump(obj) dumps all that's known about the object
+Brought to you by DON'T PANIC, your friendly Werkzeug powered traceback interpreter.

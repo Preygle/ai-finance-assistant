@@ -1,27 +1,31 @@
 {% extends 'base.html' %}
 
-{% block title %}Upload Receipt{% endblock %}
+{% block title %}Upload Receipt - AI-Powered Finance Assistant{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1 class="page-title">Upload a Receipt</h1>
-    <p class="page-subtitle">Upload an image of your receipt (JPG, PNG, or PDF) to automatically extract transaction details.</p>
+<div class="main-content">
+    <div class="container">
+        <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <div style="padding: 30px;">
+                <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-color); margin-bottom: 10px; text-align: center;">Upload a Receipt</h1>
+                <p style="color: var(--text-light-color); margin-bottom: 30px; text-align: center;">Upload an image of your receipt (JPG, PNG, or PDF) to automatically extract transaction details.</p>
 
-    <!-- Upload Form -->
-    <div class="form-container card mb-5">
-        <form method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }} <!-- Includes CSRF token -->
-            
-            <div class="form-group">
-                {{ form.receipt_file.label(class="form-label") }}
-                {{ form.receipt_file(class="form-control") }}
-                {% for error in form.receipt_file.errors %}
-                    <span class="error-message">{{ error }}</span>
-                {% endfor %}
+                <!-- Upload Form -->
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="form-group">
+                        <label for="receipt_file" class="form-label">Receipt File</label>
+                        <input type="file" name="receipt_file" id="receipt_file" accept="image/*,application/pdf" required class="form-input">
+                        {% for error in form.receipt_file.errors %}
+                            <span style="color: var(--danger-color); font-size: 0.9rem; display: block; margin-top: 5px;">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">Upload Receipt</button>
+                </form>
             </div>
-            
-            {{ form.submit(class="btn btn-primary btn-block") }}
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

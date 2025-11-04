@@ -6,31 +6,29 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>{% block title %}AI-Powered Finance Assistant{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <i class="fas fa-chart-line"></i>
-                <span>Finance Assistant</span>
+                Finance Assistant
             </div>
             <div class="nav-menu">
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('index') }}" class="nav-link">Home</a>
-                    <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
-                    <a href="{{ url_for('analytics') }}" class="nav-link">Analytics</a>
-                    <a href="{{ url_for('transactions') }}" class="nav-link">Transactions</a>
-                    <a href="{{ url_for('upload') }}" class="nav-link">Upload</a>
-                    <a href="{{ url_for('blockchain_logs') }}" class="nav-link">Blockchain Logs</a>
-                    <a href="{{ url_for('upload_receipt') }}" class="nav-link">Upload Receipt</a>
+                    <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Home</a>
+                    <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">Dashboard</a>
+                    <a href="{{ url_for('analytics') }}" class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}">Analytics</a>
+                    <a href="{{ url_for('transactions') }}" class="nav-link {% if request.endpoint == 'transactions' %}active{% endif %}">Transactions</a>
+                    <a href="{{ url_for('upload') }}" class="nav-link {% if request.endpoint in ['upload', 'upload_csv', 'preview_csv', 'process_csv'] %}active{% endif %}">Upload</a>
+                    <a href="{{ url_for('blockchain_logs') }}" class="nav-link {% if request.endpoint == 'blockchain_logs' %}active{% endif %}">Blockchain Logs</a>
+                    <a href="{{ url_for('upload_receipt') }}" class="nav-link {% if request.endpoint == 'upload_receipt' %}active{% endif %}">Upload Receipt</a>
                     <div class="nav-user">
                         <span class="nav-username">{{ current_user.username }}</span>
                         <a href="{{ url_for('logout') }}" class="nav-link logout">Logout</a>
                     </div>
                 {% else %}
-                    <a href="{{ url_for('login') }}" class="nav-link">Login</a>
-                    <a href="{{ url_for('register') }}" class="nav-link">Register</a>
+                    <a href="{{ url_for('login') }}" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">Login</a>
+                    <a href="{{ url_for('register') }}" class="nav-link {% if request.endpoint == 'register' %}active{% endif %}">Register</a>
                 {% endif %}
             </div>
         </div>
@@ -44,7 +42,6 @@
                     <div class="flash-messages">
                         {% for category, message in messages %}
                             <div class="flash-message flash-{{ category }}">
-                                <i class="fas fa-{% if category == 'error' %}exclamation-circle{% elif category == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
                                 {{ message }}
                                 <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
                             </div>
@@ -62,18 +59,5 @@
             <p>&copy; 2024 AI-Powered Finance Assistant. All rights reserved.</p>
         </div>
     </footer>
-
-    <script>
-        // Auto-hide flash messages after 5 seconds
-        setTimeout(function() {
-            const flashMessages = document.querySelectorAll('.flash-message');
-            flashMessages.forEach(function(message) {
-                message.style.opacity = '0';
-                setTimeout(function() {
-                    message.remove();
-                }, 300);
-            });
-        }, 5000);
-    </script>
 </body>
 </html>

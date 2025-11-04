@@ -5,23 +5,23 @@
 {% block content %}
 <div class="main-content">
     <div class="container">
-        <div class="preview-container">
-            <div class="preview-header">
-                <h1><i class="fas fa-file-import"></i> Preview & Map CSV Data</h1>
-                <p>Review your data and map the columns to ensure accurate processing.</p>
-            </div>
+        <div class="card" style="max-width: 1000px; margin: 0 auto;">
+            <div style="padding: 30px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="font-size: 2rem; font-weight: 700; color: var(--text-color); margin-bottom: 10px;">Preview & Map CSV Data</h1>
+                    <p style="color: var(--text-light-color);">Review your data and map the columns to ensure accurate processing.</p>
+                </div>
 
-            <div class="preview-content">
                 <div class="column-mapping">
-                    <h3><i class="fas fa-map-signs"></i> Column Mapping</h3>
-                    <p>Match your CSV columns to the required transaction fields. Our smart-detection has pre-selected some columns for you.</p>
+                    <h3 style="font-size: 1.5rem; font-weight: 600; color: var(--text-color); margin-bottom: 10px;">Column Mapping</h3>
+                    <p style="color: var(--text-light-color); margin-bottom: 25px;">Match your CSV columns to the required transaction fields. Our smart-detection has pre-selected some columns for you.</p>
                     
                     <form method="POST" action="{{ url_for('process_csv') }}" class="mapping-form">
                         {{ form.hidden_tag() }}
                         
-                        <div class="mapping-grid">
+                        <div class="mapping-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px;">
                             <div class="mapping-field">
-                                <label for="date_column"><i class="fas fa-calendar-alt"></i> Date Column *</label>
+                                <label for="date_column" class="form-label">Date Column *</label>
                                 <select name="date_column" id="date_column" class="form-input" required>
                                     <option value="">Select date column</option>
                                     {% for header in headers %}
@@ -31,7 +31,7 @@
                             </div>
                             
                             <div class="mapping-field">
-                                <label for="merchant_column"><i class="fas fa-store"></i> Merchant Column *</label>
+                                <label for="merchant_column" class="form-label">Merchant Column *</label>
                                 <select name="merchant_column" id="merchant_column" class="form-input" required>
                                     <option value="">Select merchant column</option>
                                     {% for header in headers %}
@@ -41,7 +41,7 @@
                             </div>
                             
                             <div class="mapping-field">
-                                <label for="amount_column"><i class="fas fa-money-bill-wave"></i> Amount Column *</label>
+                                <label for="amount_column" class="form-label">Amount Column *</label>
                                 <select name="amount_column" id="amount_column" class="form-input" required>
                                     <option value="">Select amount column</option>
                                     {% for header in headers %}
@@ -51,7 +51,7 @@
                             </div>
                             
                             <div class="mapping-field">
-                                <label for="category_column"><i class="fas fa-tags"></i> Category Column</label>
+                                <label for="category_column" class="form-label">Category Column</label>
                                 <select name="category_column" id="category_column" class="form-input">
                                     <option value="">Select category column (optional)</option>
                                     {% for header in headers %}
@@ -61,37 +61,31 @@
                             </div>
                         </div>
 
-                        <div class="currency-settings">
-                            <h4><i class="fas fa-coins"></i> Currency Settings</h4>
+                        <div class="currency-settings" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                            <h4 style="font-size: 1.2rem; font-weight: 600; color: var(--text-color); margin-bottom: 15px;">Currency Settings</h4>
                             <div class="currency-group">
-                                <label for="currency">Original Currency in CSV</label>
+                                <label for="currency" class="form-label">Original Currency in CSV</label>
                                 <select name="currency" id="currency" class="form-input">
                                     <option value="INR">Indian Rupee (INR)</option>
                                     <option value="USD">US Dollar (USD)</option>
                                     <option value="EUR">Euro (EUR)</option>
                                     <option value="GBP">British Pound (GBP)</option>
                                 </select>
-                                <p class="form-help">All amounts will be converted to INR for consistent analysis.</p>
+                                <p style="font-size: 0.875rem; color: var(--text-light-color); margin-top: 5px;">All amounts will be converted to INR for consistent analysis.</p>
                             </div>
                         </div>
 
-                        <div class="preview-actions">
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url_for('transactions') }}'">
-                                <i class="fas fa-times"></i>
-                                Cancel
-                            </button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fas fa-check-circle"></i>
-                                Confirm & Process
-                            </button>
+                        <div style="display: flex; justify-content: flex-end; gap: 15px; margin-top: 30px;">
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='{{ url_for('transactions') }}'">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Confirm & Process</button>
                         </div>
                     </form>
                 </div>
 
-                <div class="preview-table-container">
-                    <h3><i class="fas fa-table"></i> Data Preview</h3>
-                    <div class="table-wrapper">
-                        <table class="transactions-table preview-table">
+                <div class="preview-table-container" style="margin-top: 40px;">
+                    <h3 style="font-size: 1.5rem; font-weight: 600; color: var(--text-color); margin-bottom: 20px;">Data Preview</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     {% for header in headers %}

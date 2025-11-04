@@ -6,7 +6,6 @@
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-header">
-            <i class="fas fa-sign-in-alt"></i>
             <h1>Login</h1>
             <p>Welcome back! Please sign in to your account.</p>
         </div>
@@ -20,7 +19,7 @@
                 {% if form.username.errors %}
                     <div class="error-messages">
                         {% for error in form.username.errors %}
-                            <span>{{ error }}</span>
+                            <span style="color: var(--danger-color); font-size: 0.9rem; display: block; margin-top: 5px;">{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -32,7 +31,7 @@
                 {% if form.password.errors %}
                     <div class="error-messages">
                         {% for error in form.password.errors %}
-                            <span>{{ error }}</span>
+                            <span style="color: var(--danger-color); font-size: 0.9rem; display: block; margin-top: 5px;">{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -54,4 +53,3 @@
     </div>
 </div>
 {% endblock %}
-

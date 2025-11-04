@@ -3,16 +3,15 @@
 {% block title %}Upload Data - AI-Powered Finance Assistant{% endblock %}
 
 {% block content %}
-<div class="upload-container">
+<div class="upload-page">
     <div class="upload-header">
-        <h1><i class="fas fa-cloud-upload-alt"></i> Upload Financial Data</h1>
+        <h1>Upload Financial Data</h1>
         <p>Upload your transaction data to get AI-powered insights and analysis.</p>
     </div>
 
     <div class="upload-options">
-        <div class="upload-card">
+        <div class="upload-card upload-card-blue">
             <div class="upload-card-header">
-                <i class="fas fa-file-csv"></i>
                 <h3>CSV File Upload</h3>
             </div>
             <div class="upload-card-content">
@@ -20,16 +19,10 @@
                 <form action="{{ url_for('upload_csv') }}" method="POST" enctype="multipart/form-data" class="upload-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
                     <div class="file-input-group">
+                        <label for="csv_file" class="file-label">Choose CSV File</label>
                         <input type="file" name="csv_file" id="csv_file" accept=".csv" required class="file-input">
-                        <label for="csv_file" class="file-input-label">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <span class="file-text">Choose CSV File</span>
-                        </label>
                     </div>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-upload"></i>
-                        Upload & Preview
-                    </button>
+                    <button type="submit" class="btn-primary">Upload & Preview</button>
                 </form>
                 <div class="upload-help">
                     <h4>CSV Format Requirements:</h4>
@@ -44,17 +37,13 @@
             </div>
         </div>
 
-        <div class="upload-card">
+        <div class="upload-card upload-card-green">
             <div class="upload-card-header">
-                <i class="fas fa-university"></i>
                 <h3>Bank Account Connection</h3>
             </div>
             <div class="upload-card-content">
                 <p>Securely connect your bank account using Plaid to automatically import transactions.</p>
-                <a href="{{ url_for('plaid_connect') }}" class="btn btn-secondary">
-                    <i class="fas fa-link"></i>
-                    Connect Bank Account
-                </a>
+                <a href="{{ url_for('plaid_connect') }}" class="btn-secondary">Connect Bank Account</a>
                 <div class="bank-features">
                     <h4>Bank Connection Features:</h4>
                     <ul>
@@ -68,10 +57,9 @@
         </div>
     </div>
 
-    <div class="upload-status">
+    <div class="status-section">
         <div class="status-card">
             <div class="status-header">
-                <i class="fas fa-info-circle"></i>
                 <h3>Upload Status</h3>
             </div>
             <div class="status-content">
@@ -107,136 +95,145 @@
 </div>
 
 <style>
-.upload-container {
+.upload-page {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+    background-color: #f7f9ff;
 }
 
 .upload-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #e3f2fd;
+    border: 1px solid #ccc;
 }
 
 .upload-header h1 {
-    color: #2c3e50;
+    color: #1976d2;
+    font-size: 28px;
     margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .upload-header p {
-    color: #7f8c8d;
-    font-size: 1.1em;
+    color: #555;
+    font-size: 16px;
 }
 
 .upload-options {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin-bottom: 40px;
+    gap: 25px;
+    margin-bottom: 30px;
 }
 
 .upload-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
     overflow: hidden;
-    transition: transform 0.3s ease;
-}
-
-.upload-card:hover {
-    transform: translateY(-5px);
 }
 
 .upload-card-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
     padding: 20px;
     text-align: center;
 }
 
-.upload-card-header i {
-    font-size: 2em;
-    margin-bottom: 10px;
-    display: block;
+.upload-card-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.upload-card-blue .upload-card-header {
+    background-color: #e3f2fd;
+}
+
+.upload-card-green .upload-card-header {
+    background-color: #c8e6c9;
 }
 
 .upload-card-content {
-    padding: 30px;
+    padding: 25px;
+    background-color: white;
+}
+
+.upload-card-content p {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.upload-form {
+    margin-bottom: 20px;
 }
 
 .file-input-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+}
+
+.file-label {
+    display: block;
+    padding: 12px;
+    background-color: #f5f5f5;
+    border: 2px dashed #1976d2;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: #1976d2;
+}
+
+.file-label:hover {
+    background-color: #e3f2fd;
 }
 
 .file-input {
     display: none;
 }
 
-.file-input-label {
-    display: block;
-    padding: 15px;
-    border: 2px dashed #3498db;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: #f8f9fa;
-}
-
-.file-input-label:hover {
-    border-color: #2980b9;
-    background: #e3f2fd;
-}
-
-.file-input-label i {
-    font-size: 1.5em;
-    color: #3498db;
-    margin-bottom: 10px;
-    display: block;
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-size: 1em;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
 .btn-primary {
-    background: #3498db;
+    width: 100%;
+    padding: 12px;
+    background-color: #1976d2;
     color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .btn-primary:hover {
-    background: #2980b9;
+    background-color: #1565c0;
 }
 
 .btn-secondary {
-    background: #95a5a6;
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #4caf50;
     color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .btn-secondary:hover {
-    background: #7f8c8d;
+    background-color: #45a049;
 }
 
 .upload-help, .bank-features {
     margin-top: 20px;
     padding: 15px;
-    background: #f8f9fa;
-    border-radius: 6px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
 }
 
 .upload-help h4, .bank-features h4 {
     margin-bottom: 10px;
-    color: #2c3e50;
+    color: #333;
+    font-weight: bold;
 }
 
 .upload-help ul, .bank-features ul {
@@ -249,30 +246,38 @@
     color: #555;
 }
 
-.upload-status {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+.status-section {
+    margin-bottom: 30px;
+}
+
+.status-card {
+    border: 1px solid #ccc;
+    background-color: white;
 }
 
 .status-header {
-    background: #34495e;
-    color: white;
     padding: 20px;
+    background-color: #1976d2;
+    color: white;
     text-align: center;
 }
 
+.status-header h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
 .status-content {
-    padding: 30px;
+    padding: 25px;
 }
 
 .status-item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 15px 0;
-    border-bottom: 1px solid #ecf0f1;
+    border-bottom: 1px solid #ddd;
 }
 
 .status-item:last-child {
@@ -280,8 +285,9 @@
 }
 
 .status-label {
-    font-weight: 500;
-    color: #2c3e50;
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
 }
 
 .status-value {
@@ -289,19 +295,21 @@
 }
 
 .status-enabled {
-    color: #27ae60;
-    font-weight: 500;
+    color: #2e7d32;
+    font-weight: bold;
+    display: block;
 }
 
 .status-disabled {
-    color: #e74c3c;
-    font-weight: 500;
+    color: #c62828;
+    font-weight: bold;
+    display: block;
 }
 
 .status-value small {
     display: block;
-    color: #7f8c8d;
-    font-size: 0.9em;
+    color: #666;
+    font-size: 12px;
     margin-top: 5px;
 }
 
@@ -312,7 +320,6 @@
     
     .status-item {
         flex-direction: column;
-        align-items: flex-start;
         gap: 10px;
     }
     

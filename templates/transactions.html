@@ -7,13 +7,12 @@
     <div class="container">
         <div class="transactions-container">
             <div class="transactions-header">
-                <h1><i class="fas fa-exchange-alt"></i> Financial Transactions</h1>
+                <h1>Financial Transactions</h1>
                 <p>View, manage, and analyze your financial transactions from all connected sources.</p>
             </div>
 
             <div class="actions-panel">
                 <button class="actions-panel-toggle" id="actions-panel-toggle">
-                    <i class="fas fa-chevron-down"></i>
                     <span>Actions</span>
                 </button>
                 <div class="actions-panel-content" id="actions-panel-content">
@@ -42,7 +41,7 @@
                         <div class="filter-section">
                             <div class="filter-card">
                                 <div class="filter-header">
-                                    <h3><i class="fas fa-filter"></i> Filter Transactions</h3>
+                                    <h3>Filter Transactions</h3>
                                 </div>
                                 <div class="filter-content">
                                     <form id="filter-form">
@@ -62,7 +61,7 @@
                                             <label for="date-to">To</label>
                                             <input type="date" id="date-to" class="form-input">
                                         </div>
-                                        <button type="button" id="filter-btn" class="btn btn-primary">Filter</button>
+                                        <button type="button" id="filter-btn" class="btn btn-primary btn-full">Filter</button>
                                     </form>
                                 </div>
                             </div>
@@ -72,7 +71,6 @@
                         <div class="upload-section">
                             <div class="upload-card">
                                 <div class="upload-header">
-                                    <i class="fas fa-file-csv"></i>
                                     <h3>Upload CSV File</h3>
                                 </div>
                                 <div class="upload-content">
@@ -82,29 +80,21 @@
                                         <div class="file-input-group">
                                             <input type="file" name="csv_file" id="csv_file" accept=".csv" required class="file-input">
                                             <label for="csv_file" class="file-input-label" id="file-input-label">
-                                                <i class="fas fa-cloud-upload-alt"></i>
                                                 <span id="file-name">Choose CSV File</span>
                                             </label>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-full">
-                                            <i class="fas fa-upload"></i>
-                                            Upload & Preview
-                                        </button>
+                                        <button type="submit" class="btn btn-primary btn-full">Upload & Preview</button>
                                     </form>
                                 </div>
                             </div>
 
                             <div class="upload-card">
                                 <div class="upload-header">
-                                    <i class="fas fa-university"></i>
                                     <h3>Connect Bank Account</h3>
                                 </div>
                                 <div class="upload-content">
                                     <p>Securely link your bank account via Plaid.</p>
-                                    <a href="{{ url_for('plaid_connect') }}" class="btn btn-secondary btn-full">
-                                        <i class="fas fa-link"></i>
-                                        Connect with Plaid
-                                    </a>
+                                    <a href="{{ url_for('plaid_connect') }}" class="btn btn-secondary btn-full">Connect with Plaid</a>
                                 </div>
                             </div>
                         </div>
@@ -113,28 +103,31 @@
             </div>
 
             <!-- Transactions Table -->
-                    <div class="transactions-table-container">
-                        <h2>Your Transactions</h2>
-                        <div id="loading-spinner" style="display: none;"></div>
-                        <div id="no-transactions" style="display: none;">
-                            <p>No transactions found. Try adjusting the filters or uploading a CSV file.</p>
-                        </div>
-                        <table class="transactions-table">
-                            <thead>
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Merchant</th>
-                                    <th>Amount</th>
-                                    <th>Category</th>
-                                    <th>Source</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="transactions-tbody">
-                                <!-- Transactions will be loaded here -->
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="transactions-table-container">
+                <h2>Your Transactions</h2>
+                <div id="loading-spinner" style="display: none;">
+                    <div class="spinner"></div>
+                    <span>Loading transactions...</span>
+                </div>
+                <div id="no-transactions" style="display: none;">
+                    <p>No transactions found. Try adjusting the filters or uploading a CSV file.</p>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Merchant</th>
+                                <th>Amount</th>
+                                <th>Category</th>
+                                <th>Source</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-tbody">
+                            <!-- Transactions will be loaded here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -142,7 +135,6 @@
             <div class="delete-transactions-section">
                 <div class="delete-card">
                     <div class="delete-header">
-                        <i class="fas fa-trash-alt"></i>
                         <h3>Delete Transactions</h3>
                     </div>
                     <div class="delete-content">
@@ -151,20 +143,17 @@
                             <input id="csrf_token" type="hidden" name="csrf_token" value="{{ csrf_token }}">
                             <div class="form-group">
                                 <label for="delete_start_date">Start Date</label>
-                                <input type="date" name="start_date" id="delete_start_date" class="date-input">
+                                <input type="date" name="start_date" id="delete_start_date" class="form-input">
                             </div>
                             <div class="form-group">
                                 <label for="delete_end_date">End Date</label>
-                                <input type="date" name="end_date" id="delete_end_date" class="date-input">
+                                <input type="date" name="end_date" id="delete_end_date" class="form-input">
                             </div>
                             <div class="form-checkbox">
                                 <input type="checkbox" name="confirm_delete" id="confirm_delete" required class="form-checkbox-input">
                                 <label for="confirm_delete" class="form-checkbox-label">I understand that this action is irreversible.</label>
                             </div>
-                            <button type="submit" class="btn btn-danger btn-full">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                Delete Transactions
-                            </button>
+                            <button type="submit" class="btn btn-danger btn-full">Delete Transactions</button>
                         </form>
                     </div>
                 </div>
@@ -295,24 +284,20 @@ function displayTransactions(transactions) {
     noTransactions.style.display = 'none';
     tbody.innerHTML = transactions.map(t => `
         <tr data-id="${t.id}" data-amount="${t.amount}" data-date="${t.date}">
-            <td>${new Date(t.date).toLocaleDateString('en-IN')}</td>
-            <td>${t.merchant}</td>
-            <td class="${t.amount >= 0 ? 'positive' : 'negative'}">
+            <td data-label="Date">${new Date(t.date).toLocaleDateString('en-IN')}</td>
+            <td data-label="Merchant">${t.merchant}</td>
+            <td data-label="Amount" class="${t.amount >= 0 ? 'positive' : 'negative'}">
                 ₹${Math.abs(t.amount).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
             </td>
-            <td>${t.category || 'Uncategorized'}</td>
-            <td>
+            <td data-label="Category">${t.category || 'Uncategorized'}</td>
+            <td data-label="Source">
                 <span class="source-badge ${t.source.toLowerCase()}">
                     ${t.source.toUpperCase()}
                 </span>
             </td>
-            <td class="actions">
-                <button class="btn-icon" onclick="openEditModal(${t.id})" title="Edit">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn-icon" onclick="deleteTransaction(${t.id})" title="Delete">
-                    <i class="fas fa-trash"></i>
-                </button>
+            <td data-label="Actions" class="actions">
+                <button class="btn btn-primary" style="padding: 6px 12px; font-size: 0.9rem; margin-right: 5px;" onclick="openEditModal(${t.id})" title="Edit">Edit</button>
+                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.9rem;" onclick="deleteTransaction(${t.id})" title="Delete">Delete</button>
             </td>
         </tr>
     `).join('');
@@ -359,6 +344,7 @@ function handleEditFormSubmit(event) {
     fetch(`/api/transactions/${id}`, {
         method: 'PUT',
         headers: {
+            'Content-Type': 'application/json',
             'X-CSRFToken': document.getElementById('csrf_token').value
         },
         body: JSON.stringify(data)
